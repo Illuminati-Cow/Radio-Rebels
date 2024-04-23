@@ -1,4 +1,4 @@
-class_name IMiniGame extends Node2D
+class_name IMinigame extends Node2D
 
 signal minigame_over(scores)
 
