@@ -21,3 +21,7 @@ game_manager="*res://Scripts/game_manager.gd"
 [dotnet]
 
 project/assembly_name="Radio-Rebels"
+
+[gui]
+
+theme/custom="res://Resources/UI/default_theme.tres"
