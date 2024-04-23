@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://cjaim8s2qt8og"]
+
+[ext_resource type="Script" path="res://Scenes/pulse.gd" id="1_nyugo"]
+
+[node name="Pulse" type="Node2D"]
+script = ExtResource("1_nyugo")

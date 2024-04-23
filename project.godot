@@ -14,6 +14,10 @@ config/name="Radio-Rebels"
 config/features=PackedStringArray("4.2", "Forward Plus")
 config/icon="res://icon.svg"
 
+[autoload]
+
+game_manager="*res://Scripts/game_manager.gd"
+
 [dotnet]
 
 project/assembly_name="Radio-Rebels"
