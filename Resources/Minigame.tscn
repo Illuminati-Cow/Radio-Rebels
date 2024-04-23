@@ -1,6 +1,10 @@
-[gd_scene load_steps=2 format=3 uid="uid://bd02r6pterim7"]
+[gd_scene load_steps=4 format=3 uid="uid://bd02r6pterim7"]
 
-[ext_resource type="Script" path="res://Scripts/minigame.gd" id="1_kjs77"]
+[ext_resource type="Script" path="res://Scripts/minigame.gd" id="1_3xsc3"]
+[ext_resource type="PackedScene" uid="uid://bn5ncc2037osr" path="res://Resources/UI/ControlsScreen.tscn" id="2_6ah8p"]
+[ext_resource type="PackedScene" uid="uid://bsq2r3ttc5exq" path="res://Resources/UI/PauseMenu.tscn" id="2_uca20"]
 
 [node name="Node" type="Node"]
-script = ExtResource("1_kjs77")
+script = ExtResource("1_3xsc3")
+controls_screen = ExtResource("2_6ah8p")
+pause_screen = ExtResource("2_uca20")
