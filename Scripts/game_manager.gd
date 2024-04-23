@@ -1,9 +1,9 @@
 extends Node2D
 
 
-var rumble_game = preload("res://Scenes/rumble.tscn") as MiniGame
-var pulse_game = preload("res://Scenes/pulse.tscn") as MiniGame
-var surf_game = preload("res://Scenes/surf.tscn") as MiniGame
+var rumble_game = preload("res://Scenes/rumble.tscn")
+var pulse_game = preload("res://Scenes/pulse.tscn")
+var surf_game = preload("res://Scenes/surf.tscn")
 
 
 
