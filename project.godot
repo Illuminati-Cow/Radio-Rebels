@@ -16,8 +16,10 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-game_manager="*res://Scripts/game_manager.gd"
+GameManager="*res://Scripts/game_manager.gd"
 MultiplayerInput="*res://addons/multiplayer_input/multiplayer_input.gd"
+ControllerIcons="*res://addons/controller_icons/ControllerIcons.gd"
+PlayerManager="*res://Scripts/player_manager.gd"
 
 [dotnet]
 
@@ -25,7 +27,7 @@ project/assembly_name="Radio-Rebels"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/multiplayer_input/plugin.cfg")
+enabled=PackedStringArray("res://addons/controller_icons/plugin.cfg", "res://addons/multiplayer_input/plugin.cfg")
 
 [gui]
 
