@@ -16,6 +16,10 @@ var player_data: Dictionary = {}
 const MAX_PLAYERS = 4
 
 
+func _ready():
+	process_mode = Node.PROCESS_MODE_ALWAYS
+
+
 func join(device: int):
 	var player = next_player()
 	if player >= 0:

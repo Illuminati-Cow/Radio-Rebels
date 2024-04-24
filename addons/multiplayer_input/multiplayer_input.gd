@@ -26,7 +26,20 @@ var device_actions = {}
 ## Array of GUIDs - If a device with an ignored GUID is detected, no input actions will be added.
 var ignored_guids = []
 
+#region NOTE: Added code to implement controller echo events
+var ongoing_actions = {}
+func _echo_action(action):
+	return
+	#if is_action_just_pressed(event.device, event.as_text()):
+		#ongoing_actions[event.as_text()] = true
+	#elif is_action_just_released(event.device, event.as_text()):
+		#ongoing_actions[event.as_text()] = false
+	#else:
+		#Input.action_press(get_action_name(event.device, event.i))
+#endregion
+
 func _init():
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	reset()
 
 # Call this if you change any of the core actions or need to reset everything.
@@ -148,9 +161,12 @@ func is_action_just_released(device: int, action: StringName, exact_match: bool 
 	return Input.is_action_just_released(action, exact_match)
 
 ## This is equivalent to Input.is_action_pressed except it will only check the relevant device.
-func is_action_pressed(device: int, action: StringName, exact_match: bool = false) -> bool:
+func is_action_pressed(device: int, action: StringName, exact_match: bool = false, allow_echo: bool = false) -> bool:
 	if device >= 0:
 		action = get_action_name(device, action)
+		if (allow_echo):
+			_echo_action(action)
+		
 	return Input.is_action_pressed(action, exact_match)
 
 ## Returns the name of a gamepad-specific action

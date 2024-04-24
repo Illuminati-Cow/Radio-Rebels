@@ -6,6 +6,8 @@ class_name IMinigame extends Node
 ## a parent function ensure that you are not breaking funcitonality and if in
 ## doubt, you should call the parent method before executing your logic.
 
+## Emitted when the minigame finishes. Returns a dictionary indexed by player
+## id numbers that contains the final in-game scores.
 signal minigame_over(scores)
 
 @export_group("UI Scenes")
@@ -17,6 +19,7 @@ signal minigame_over(scores)
 @export var pause_screen : PackedScene
 
 var _player_count : int
+var _devices = {}
 var _controls_screen : Control
 var _pause_menu : PauseMenu
 
@@ -24,6 +27,8 @@ var _pause_menu : PauseMenu
 ## Set up the game for the number of players specified
 func setup(player_count : int) -> void:
 	_player_count = player_count
+	for id in PlayerManager.get_player_indexes():
+		_devices[id] = (PlayerManager.get_player_data(id, "device"))
 	process_mode = Node.PROCESS_MODE_PAUSABLE
 	_controls_screen = controls_screen.instantiate() as Control
 	_controls_screen.visible = false
@@ -32,7 +37,7 @@ func setup(player_count : int) -> void:
 	add_child(_pause_menu)
 	
 
-# Start the game's sequence
+## Start the game's main sequence
 func start() -> void:
 	await _show_controls()
 
@@ -60,7 +65,7 @@ func _show_controls() -> void:
 
 ## Coroutine - Wait for the specified input and then return true.
 ## Returns false if the input is not pressed within the time limit.
-func _input_awaiter(action : String, time_limit = -1) -> bool:
+func _input_awaiter(action : String, time_limit : float = -1) -> bool:
 	var action_fired := false
 	var timer : SceneTreeTimer = null
 	if time_limit > 0:
