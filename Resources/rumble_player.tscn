@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3 uid="uid://b6wdv46w6pe7h"]
+
+[ext_resource type="Script" path="res://Scripts/rumble_player.gd" id="1_m045q"]
+[ext_resource type="Texture2D" uid="uid://brps5rykdgmmr" path="res://icon.svg" id="1_xmyx3"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4hs11"]
+
+[node name="RumblePlayer" type="Area2D" groups=["player"]]
+script = ExtResource("1_m045q")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_xmyx3")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_4hs11")
+
+[node name="Timer" type="Timer" parent="."]
+
+[connection signal="area_entered" from="." to="." method="_on_RumblePlayer_area_entered"]
