@@ -6,14 +6,26 @@ var players := {
 }
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	players_count = PlayerManager.get_player_count()
+	players_count = 1#PlayerManager.get_player_count()
 	setup(players_count)
-	start() #the following I think should only start after the player presses a button to close the controls screen
+	await start() #the following I think should only start after the player presses a button to close the controls screen Edit: it doesn't wait, apparently - not sure why
+	print("test")
 	for i in (players_count):
-		players[i] = get_node("res://Resources/rumble_player.tscn").instantiate() as RumblePlayer
-		players[i].playerId = i
+		players[i] = (load("res://Resources/rumble_player.tscn")).instantiate() as RumblePlayer
+		print("instantiated player")
+		print(i)
+		players[i].player_id = i
 	for i in (players_count):
-		players[i].transform.origin 
+		players[i].position = Vector2(150, 150)
+	
+	var t
+	for i in 5:
+		for j in 5:
+			t = load("res://Resources/transmission_tower.tscn").instantiate()
+			(t.position).x = i*64
+			(t.position).y = j*64
+			print(t.position)
+			
 	
 
 

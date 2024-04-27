@@ -22,8 +22,10 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	var direction = MultiplayerInput.get_vector(PlayerManager.get_player_device(player_id), "right", "left", "up", "down")
-	if direction != 0:
+	print(player_id)
+	var direction = MultiplayerInput.get_vector(PlayerManager.get_player_device(player_id), "move_right", "move_left", "move_up", "move_down")
+	if direction != Vector2(0, 0):
+		print(player_id)
 		if (direction.x).abs() >= (direction.y).abs():
 			x_axis = 1
 			y_axis = 0
@@ -49,3 +51,4 @@ func _on_RumblePlayer_area_entered(area):
 		overlapping_player = true
 		if area.entered_tower_time > entered_tower_time:
 			area.queue_free()
+			print("eliminated other player")
