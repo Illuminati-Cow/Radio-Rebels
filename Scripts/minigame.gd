@@ -71,9 +71,10 @@ func _input_awaiter(action : String, time_limit : float = -1) -> bool:
 	if time_limit > 0:
 		timer = get_tree().create_timer(time_limit)
 	while not action_fired:
-		if Input.is_action_pressed(action):
-			action_fired = true
-		elif timer and timer.time_left == 0:
+		for device in _devices:
+			if MultiplayerInput.is_action_pressed(device, "start"):
+				action_fired = true
+		if not action_fired and timer and timer.time_left == 0:
 			return false
 		else:
 			await get_tree().process_frame

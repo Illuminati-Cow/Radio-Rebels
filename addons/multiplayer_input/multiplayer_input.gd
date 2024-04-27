@@ -27,15 +27,17 @@ var device_actions = {}
 var ignored_guids = []
 
 #region NOTE: Added code to implement controller echo events
-var ongoing_actions = {}
-func _echo_action(action):
-	return
-	#if is_action_just_pressed(event.device, event.as_text()):
-		#ongoing_actions[event.as_text()] = true
-	#elif is_action_just_released(event.device, event.as_text()):
-		#ongoing_actions[event.as_text()] = false
-	#else:
-		#Input.action_press(get_action_name(event.device, event.i))
+var ongoing_actions = []
+func _echo_actions():
+	while (true):
+		for action in ongoing_actions:
+			Input.action_press(action)
+			print(action)
+		await get_tree().process_frame
+
+
+func _ready():
+	_echo_actions()
 #endregion
 
 func _init():
@@ -158,6 +160,10 @@ func is_action_just_pressed(device: int, action: StringName, exact_match: bool =
 func is_action_just_released(device: int, action: StringName, exact_match: bool = false) -> bool:
 	if device >= 0:
 		action = get_action_name(device, action)
+		# NOTE: Added code to support controller action echoing
+		var index = ongoing_actions.find(action)
+		if index >= 0:
+			ongoing_actions.remove_at(index)
 	return Input.is_action_just_released(action, exact_match)
 
 ## This is equivalent to Input.is_action_pressed except it will only check the relevant device.
@@ -165,7 +171,8 @@ func is_action_pressed(device: int, action: StringName, exact_match: bool = fals
 	if device >= 0:
 		action = get_action_name(device, action)
 		if (allow_echo):
-			_echo_action(action)
+			# NOTE: Added code to support controller action echoing
+			ongoing_actions.append(action)
 		
 	return Input.is_action_pressed(action, exact_match)
 

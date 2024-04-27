@@ -4,64 +4,111 @@ class_name SurfMinigame extends IMinigame
 const CURVE_RES = 1000
 const BAKE_RESOLUTION_PX = 5
 #endregion
-
+@export_group("Player")
+@export var player_res : PackedScene
 @export var base_speed := 10
-@export var safe_angle := 90
-@export var min_safe_angle := 25
+@export var max_safe_angle := 90.0
+@export var min_safe_angle := 25.0
+@export var safe_angle : float
+@export var difficulty_max_time : float
+@export_group("Camera")
 @export var zoom_factor := 1
 @onready var camera = $Camera2D as Camera2D
-var terrain_pool : Array[QuadBezier] = []
+var _players : Array[SurfPlayer]
+var terrain_pool : Array[Terrain] = []
+var _time : float = 0
+
+
+func _ready():
+	await get_tree().create_timer(0.15).timeout
+	setup(1)
+
 
 func setup(player_count : int) -> void:
+	PlayerManager.join(0)
 	super.setup(player_count)
-	#for i in range(10):
-		#_spawn_terrain_piece()
+	_spawn_terrain_piece($Spawnpoint.global_position - Vector2(1000, 0), 1000, -800)
+	var flip = 1
+	for i in range(10):
+		_spawn_terrain_piece(terrain_pool[-1].visual.get_node("Spawnpoint").global_position, \
+				1000, 800 * flip)
+		flip = -flip
+	for device in _devices:
+		var player := player_res.instantiate() as SurfPlayer
+		player.init(device, self)
+		player.name = "Player %d" % device
+		player.position = $Spawnpoint.position + Vector2(0, -500)
+		player.set_process(false)
+		add_child(player, true)
+		_players.append(player)
+	start()
+
+
+func start():
+	print("Start")
+	await super.start()
+	_time = 0
+	for player in _players:
+		player.set_process(true)
+
+
+func height_at_point(position: Vector2, curve: QuadBezier = null) -> Vector2:
+	if not curve:
+		curve = _get_curve(position)
+	var interp = curve.get_t_value(position)
+	return curve.sample(interp)
+
+func normal_at_point(position: Vector2, curve: QuadBezier = null) -> Vector2:
+	if not curve:
+		curve = _get_curve(position)
+	var interp = curve.get_t_value(position)
+	return curve.normal_at_sample(interp)
+
+
+func get_curve_at_point(position: Vector2) -> QuadBezier:
+	return _get_curve(position)
+
+
+func _get_curve(position: Vector2) -> QuadBezier:
+	for terrain in terrain_pool:
+		var t := terrain.curve.get_t_value(position) as float
+		if t >= 0 and t <= 1:
+			return terrain.curve
+	return null
 
 
 func _process(delta):
+	# Update game state
+	_time += delta
+	safe_angle = Tween.interpolate_value(max_safe_angle, min_safe_angle - max_safe_angle,\
+			_time, difficulty_max_time, Tween.TRANS_LINEAR, Tween.EASE_OUT)
+	for player in _players:
+		player.safe_angle = safe_angle
+	# Update terrain
 	if terrain_pool.is_empty():
 		return
-	if terrain_pool[0].position.x < camera.position.x - 4000:
+	if terrain_pool[0].visual.position.x < camera.position.x - 4000:
 		terrain_pool.push_back(terrain_pool.pop_front())
-		terrain_pool[-1].position = terrain_pool[-2].get_node("%Spawnpoint").global_position
+		terrain_pool[-1].position = \
+				terrain_pool[-2].visual.get_node("Spawnpoint").global_position
 
 
-#func _spawn_terrain_piece() -> void:
-	#var piece := terrain_pieces.pick_random().instantiate() as Node2D
-	#if terrain_pool.is_empty():
-		#piece.position = Vector2(-2000, 200)
-	#else:
-		#piece.position = terrain_pool.back().get_node("%Spawnpoint").global_position
-	#terrain_pool.append(piece)
-	#add_child(piece)
+func _spawn_terrain_piece(start : Vector2, w : float, h : float) -> void:
+	var apex := Vector2(start.x + w / 2, start.y + h)
+	var end := Vector2(start.x + w, start.y)
+	var curve := QuadBezier.new(start, apex, end)
+	var visual := curve.create_visual(1000, Color.GREEN)
+	add_child(visual)
+	terrain_pool.append(Terrain.new(curve, visual))
 
 
-#func _spawn_terrain_curve(start : Vector2, w : float, h : float) -> void:
-	#var apex := Vector2(start.x + w / 2, start.y + h)
-	#var end := Vector2(start.x + w, start.y)
-	#var curve = QuadBezier(start, apex, end)
-	#var line = Line2D.new()
-	#
-	## Tessallate curve to reduce points needed to be drawn
-	#var tessallated_points := curve.tessellate()
-	#for p in tessallated_points:
-		#line.add_point(p)
-	#line.position = Vector2(0, 0)
-	#add_child(line)
-	#var spawnpoint = Marker2D.new()
-	#spawnpoint.position = end
-	#line.add_child(spawnpoint)
-	#
-	## WARNING: DEBUG
-	#var debug_line = Line2D.new()
-	#debug_line.add_point(start)
-	#debug_line.add_point(end)
-	#debug_line.modulate = Color.VIOLET
-	#debug_line.modulate.a = 0.1
-	#add_child(debug_line)
-	##enddebug
-
-
+class Terrain:
+	var curve
+	var visual
+	
+	func _init(bezier_curve: QuadBezier, bezier_visual):
+		curve = bezier_curve
+		visual = bezier_visual
 
 
 class QuadBezier:
@@ -69,7 +116,9 @@ class QuadBezier:
 	var mid := Vector2.ZERO
 	var end := Vector2.ZERO
 	var curve := Curve2D.new()
-	var _curve_length : float
+	var length : float : 
+		get:
+			return curve.get_baked_length()
 	
 	func _init(start_point: Vector2, mid_point: Vector2, end_point: Vector2):
 		start = start_point
@@ -80,7 +129,6 @@ class QuadBezier:
 		for i in range(CURVE_RES):
 			curve.add_point(_sample(float(i) / CURVE_RES))
 		curve.add_point(end)
-		_curve_length = curve.get_baked_length()
 	
 	
 	func sample(t: float) -> Vector2:
@@ -93,6 +141,33 @@ class QuadBezier:
 		var q = sqrt(d.x * d.x + d.y * d.y)
 
 		return Vector2(-d.y / q, d.x / q) 
+	
+	
+	func get_t_value(position: Vector2) -> float:
+		return (position.x - start.x) / (end.x - start.x)
+	
+	
+	func create_visual(depth: float = sample(0.5).y, color: Color = Color.WHITE) -> Polygon2D:
+		var poly = Polygon2D.new()
+		poly.antialiased = true
+		poly.color = color
+		poly.polygon.resize(CURVE_RES)
+		poly.polygon.fill(Vector2.ZERO)
+		var points = []
+		# Tessallate curve to reduce points needed to be drawn
+		for p in curve.tessellate():
+			points.append(p)
+		poly.position = Vector2(0, 0)
+		points.append(Vector2(end.x, sample(0.5).y + depth))
+		points.append(Vector2(start.x, sample(0.5).y + depth))
+		poly.polygon = points
+		# Spawnpoint for next curve
+		var spawnpoint = Marker2D.new()
+		spawnpoint.position = end
+		spawnpoint.name = "Spawnpoint"
+		poly.add_child(spawnpoint, true)
+		
+		return poly
 	
 	
 	# Source: https://docs.godotengine.org/en/stable/tutorials/math/beziers_and_curves.html
