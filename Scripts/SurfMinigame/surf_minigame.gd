@@ -25,18 +25,19 @@ func _ready():
 
 
 func setup(player_count : int) -> void:
-	PlayerManager.join(0)
+	PlayerManager.join(-1)
 	super.setup(player_count)
 	_spawn_terrain_piece($Spawnpoint.global_position - Vector2(1000, 0), 1000, -800)
 	var flip = 1
 	for i in range(10):
 		_spawn_terrain_piece(terrain_pool[-1].visual.get_node("Spawnpoint").global_position, \
-				1000, 800 * flip)
+			1000, 800 * flip)
 		flip = -flip
-	for device in _devices:
+	for id in _devices:
+		var device = _devices[id] as int
 		var player := player_res.instantiate() as SurfPlayer
 		player.init(device, self)
-		player.name = "Player %d" % device
+		player.name = "Player %d" % id
 		player.position = $Spawnpoint.position + Vector2(0, -500)
 		player.set_process(false)
 		add_child(player, true)
@@ -81,7 +82,7 @@ func _process(delta):
 	# Update game state
 	_time += delta
 	safe_angle = Tween.interpolate_value(max_safe_angle, min_safe_angle - max_safe_angle,\
-			_time, difficulty_max_time, Tween.TRANS_LINEAR, Tween.EASE_OUT)
+		_time, difficulty_max_time, Tween.TRANS_LINEAR, Tween.EASE_OUT)
 	for player in _players:
 		player.safe_angle = safe_angle
 	# Update terrain
@@ -90,7 +91,7 @@ func _process(delta):
 	if terrain_pool[0].visual.position.x < camera.position.x - 4000:
 		terrain_pool.push_back(terrain_pool.pop_front())
 		terrain_pool[-1].position = \
-				terrain_pool[-2].visual.get_node("Spawnpoint").global_position
+			terrain_pool[-2].visual.get_node("Spawnpoint").global_position
 
 
 func _spawn_terrain_piece(start : Vector2, w : float, h : float) -> void:
@@ -116,7 +117,7 @@ class QuadBezier:
 	var mid := Vector2.ZERO
 	var end := Vector2.ZERO
 	var curve := Curve2D.new()
-	var length : float : 
+	var length : float :
 		get:
 			return curve.get_baked_length()
 	
@@ -140,7 +141,7 @@ class QuadBezier:
 		var d = _derivative(t)
 		var q = sqrt(d.x * d.x + d.y * d.y)
 
-		return Vector2(-d.y / q, d.x / q) 
+		return Vector2(-d.y / q, d.x / q)
 	
 	
 	func get_t_value(position: Vector2) -> float:
