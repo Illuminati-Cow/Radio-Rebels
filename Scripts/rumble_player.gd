@@ -8,6 +8,7 @@ class_name RumblePlayer extends Area2D
 #}
 
 @export var player_id := -1 as int
+@export var device_num = 0
 @export var entered_tower_time := 0 as float
 var overlapping_player := false as bool
 var x_axis := 0 as float
@@ -23,7 +24,7 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	#print(player_id)
-	var direction = MultiplayerInput.get_vector(PlayerManager.get_player_device(player_id), "move_right", "move_left", "move_up", "move_down")
+	var direction = MultiplayerInput.get_vector(device_num, "move_right", "move_left", "move_up", "move_down")
 	print(direction)
 	if direction != Vector2(0, 0):
 		print(player_id)

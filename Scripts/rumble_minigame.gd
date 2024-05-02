@@ -8,23 +8,27 @@ var players_count : int
 var players := {
 	
 }
+
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	players_count = 1#PlayerManager.get_player_count()
-	setup(players_count)
-	await start() #the following I think should only start after the player presses a button to close the controls screen Edit: it doesn't wait, apparently - not sure why
+	await get_tree().create_timer(0.2).timeout
+	PlayerManager.join(-1)
+	super.setup(players_count)
+	start() #the following I think should only start after the player presses a button to close the controls screen Edit: it doesn't wait, apparently - not sure why
 	print("test")
-	for i in (players_count):
-		players[i] = player_object.instantiate() as RumblePlayer
-		root.add_child(players[i])
+	print(_devices)
+	
+	for device in (_devices):
+		players[device] = player_object.instantiate() as RumblePlayer
+		root.add_child(players[device])
 		print("instantiated player")
 		#print(i)
-		players[i].player_id = i
-		print(players[i].player_id)
-	for i in (players_count):
-		players[i].position = Vector2(150, 150)
-		print("players[i].position:")
-		print(players[i].position)
+		#players[devices].player_id = i
+		players[device].device_num = _devices[device]
+		players[device].position = Vector2(150, 150)
+		#print(players[i].player_id)
 	
 	var t
 	for i in 5:
