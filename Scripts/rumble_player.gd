@@ -10,7 +10,7 @@ class_name RumblePlayer extends Area2D
 @export var player_id := -1 as int
 @export var device_num = 0
 @export var entered_tower_time := 0 as float
-signal destroyed_other_player
+signal destroyed_other_player (player : int)
 var overlapping_player := false as bool
 var x_axis := 0 as float
 var y_axis := 0 as float
@@ -62,6 +62,6 @@ func _on_RumblePlayer_area_entered(area):
 		print(entered_tower_time)
 		print(area.entered_tower_time)
 		if area.entered_tower_time < entered_tower_time:
-			destroyed_other_player.emit()
+			destroyed_other_player.emit(area.device_num)
 			area.queue_free()
 			print("eliminated other player")

@@ -11,6 +11,12 @@ var players := {
 	
 }
 
+var scores := {
+	
+}
+
+var eliminated_players = []
+
 #print(root)
 #var game_timer : SceneTreeTimer
 
@@ -53,21 +59,30 @@ func _ready():
 		players[device].device_num = _devices[device]
 		players[device].position = Vector2(j*2*192+400, 2*192+400)
 		#print(players[i].player_id)
+		scores[device] = players_count
 	
 	get_tree().paused = false
 	game_timer.paused = false
 	game_timer.start(30)
 			
 	
-func _player_eliminated():
+func _player_eliminated(device):
 	print("player eliminated")
 	current_players = current_players - 1
 	print("current players:")
 	print(current_players)
+	eliminated_players.append(device)
 	if current_players <= 1:
+		#eliminated_players.append((root.find_child("RumblePlayer")).device_num)
 		print("minigame over")
-		minigame_over.emit()
-		get_tree().change_scene_to_file("res://Scenes/transition_scene.tscn")
+		var places = players_count-1
+		for i in places:
+			scores[eliminated_players.pop_back()] = players_count-i
+		#for i in eliminated_players:
+			#scores[i] = 
+			
+		minigame_over.emit(scores)
+		#get_tree().change_scene_to_file("res://Scenes/transition_scene.tscn")
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -75,5 +90,8 @@ func _process(delta):
 	print(game_timer.time_left)
 	if game_timer.time_left < 0.001:
 		print("minigame over")
-		minigame_over.emit()
-		get_tree().change_scene_to_file("res://Scenes/transition_scene.tscn")
+		var places = players_count-eliminated_players.size()
+		for i in places:
+			scores[eliminated_players.pop_back()] = players_count-i
+		minigame_over.emit(scores)
+		#get_tree().change_scene_to_file("res://Scenes/transition_scene.tscn")
