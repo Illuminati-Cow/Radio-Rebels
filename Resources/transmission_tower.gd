@@ -1,9 +1,9 @@
-class_name PulseMinigame extends IMinigame
-#Isha
+class_name TransmissionTower extends Area2D
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	print("pulse started")
+	pass # Replace with function body.
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

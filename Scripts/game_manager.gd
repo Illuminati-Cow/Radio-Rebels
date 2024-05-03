@@ -5,7 +5,6 @@ var rumble_game = preload("res://Scenes/rumble.tscn")
 var pulse_game = preload("res://Scenes/pulse.tscn")
 var surf_game = preload("res://Scenes/surf.tscn")
 
-
 var games_dict = {
 	"rumble" : rumble_game,
 	"pulse" : pulse_game,
@@ -50,8 +49,8 @@ func _pick_next_game():
 func _change_to_next_game():
 	print("changing game to ")
 	print(next_game)
-	assert(games_dict["rumble"] != null)
-	get_tree().change_scene_to_packed(games_dict["rumble"])
+	assert(games_dict["pulse"] != null)
+	get_tree().change_scene_to_packed(games_dict["pulse"])
 
 
 func _on_player_joined(player : int):
