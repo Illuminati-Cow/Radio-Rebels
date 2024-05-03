@@ -1,8 +1,8 @@
 class_name RumbleMinigame extends IMinigame
 
 @onready var root = get_tree().current_scene
-@onready var player_object = load("res://Resources/rumble_player.tscn")
-@onready var tower_object = load("res://Resources/transmission_tower.tscn")
+@onready var player_object = load("res://Resources/RumbleMinigame/rumble_player.tscn")
+@onready var tower_object = load("res://Resources/RumbleMinigame/transmission_tower.tscn")
 
 var players_count : int
 var current_players : int
@@ -16,6 +16,7 @@ func _ready():
 	players_count = 2#PlayerManager.get_player_count()
 	current_players = players_count
 	await get_tree().create_timer(0.2).timeout
+	PlayerManager.join(-1)
 	PlayerManager.join(0)
 	super.setup(players_count)
 	start() #the following I think should only start after the player presses a button to close the controls screen Edit: it doesn't wait, apparently - not sure why
