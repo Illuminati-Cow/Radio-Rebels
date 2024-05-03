@@ -9,6 +9,7 @@ class_name SurfPlayer extends Node2D
 @export var safe_angle : float
 @export var coll : CollisionShape2D
 @export var velocity : Vector2 = Vector2.ZERO
+@export var escape_velocity : Vector2 = Vector2(0, -5)
 
 var is_dead = false
 var id : int
@@ -18,6 +19,15 @@ var _device: int
 var _game : SurfMinigame
 var _grounded : bool = false
 var _radius : float = 64
+var _debug_vel_line = Line2D.new()
+var _debug_orth_line = Line2D.new()
+var _debug_norm_line = Line2D.new()
+var _airborne_timer := Timer.new()
+@onready var gravity := GRAVITY
+
+func _ready():
+	process_mode = Node.PROCESS_MODE_PAUSABLE
+	set_process(false)
 
 func init(device: int, player_id: int, game: SurfMinigame):
 	_device = device
@@ -43,11 +53,14 @@ func _process(delta: float):
 		visible = false
 		return
 	_handle_input()
-		
-	var new_pos = position + velocity
-	var curve := _game.get_curve_at_point(new_pos)
-	
-	if new_pos.y - _radius < _game.height_at_point(new_pos, curve).y and not _grounded:
+	var old_vel := velocity
+	velocity += gravity * delta * (3 if _grounded else 1)
+	# Add hack to prevent gravity from slowing movement too much
+	if velocity.length_squared() < old_vel.length_squared() and _grounded:
+		velocity = old_vel
+	var new_pos := position + velocity
+	#new_pos += delta * gravity if not _grounded else Vector2.ZERO
+	if _just_collided(new_pos) and _airborne_timer.is_stopped():
 		print("Collision!")
 		new_pos = _snap_to_ground(new_pos)
 		var angle = _calculate_collision_angle(new_pos, velocity)
@@ -76,12 +89,12 @@ func _process(delta: float):
 	velocity.x = clamp(velocity.x, min_horz_speed if _grounded else 0, max_horz_speed)
 	velocity.y = clamp(velocity.y, -max_vert_speed, max_vert_speed)
 	position = new_pos
-	
 
-func _handle_input():
+
+func _handle_input() -> void:
 	if MultiplayerInput.is_action_pressed(_device, "dive") and not _grounded:
 		_is_diving = true
-	elif MultiplayerInput.is_action_just_released(_device, "dive"):
+	elif not MultiplayerInput.is_action_pressed(_device, "dive"):
 		_is_diving = false
 
 
