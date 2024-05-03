@@ -15,6 +15,7 @@ const BAKE_RESOLUTION_PX = 10
 @export var zoom_factor := 1
 @onready var camera = %Camera as GroupTrackingCamera
 var _players : Array[SurfPlayer]
+var _dead_players : Dictionary
 var terrain_pool : Array[Terrain] = []
 var _time : float = 0
 var _game_started := false
@@ -40,7 +41,7 @@ func setup(player_count : int) -> void:
 	for id in _devices:
 		var device = _devices[id] as int
 		var player := player_res.instantiate() as SurfPlayer
-		player.init(device, self)
+		player.init(device, id, self)
 		player.name = "Player %d" % id
 		player.position = $Spawnpoint.position + Vector2(100, -500)
 		add_child(player, true)
@@ -100,6 +101,7 @@ func _leading_player() -> SurfPlayer:
 	return _players[0]
 
 
+
 func _process(delta):
 	if not _game_started:
 		return
@@ -112,7 +114,7 @@ func _process(delta):
 	# Update terrain
 	if terrain_pool.is_empty():
 		return
-	if terrain_pool[0].position.x < camera.position.x - 5000:
+	if terrain_pool[0].position.x < camera.position.x - 3000:
 		var terrain := terrain_pool.pop_front() as Terrain
 		terrain.queue_free()
 		_spawn_terrain_piece(terrain_pool[-1].visual.get_node("Spawnpoint").global_position, \
@@ -120,6 +122,16 @@ func _process(delta):
 		_spawn_flip = -_spawn_flip
 	# Update trackpoints
 	_winner_trackpoint.position.x = _leading_player().position.x
+	for player in _players:
+		var rect = get_viewport().get_visible_rect()
+		if player.global_position.x < rect.position.x - rect.size.x:
+			player.is_dead = true
+			_dead_players[player.id] = 1 + _dead_players.keys().size()
+	if _players.filter(func (p): return p.is_alive).size() == 1:
+		Engine.time_scale = 0.2
+		await get_tree().create_timer(1).timeout
+		Engine.time_scale = 1
+		minigame_over.emit(_dead_players)
 
 
 func _spawn_terrain_piece(start : Vector2, w : float, h : float) -> void:
