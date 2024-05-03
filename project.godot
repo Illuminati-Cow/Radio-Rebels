@@ -16,9 +16,9 @@ config/icon="res://icon.svg"
 
 [autoload]
 
+ControllerIcons="*res://addons/controller_icons/ControllerIcons.gd"
 MultiplayerInput="*res://addons/multiplayer_input/multiplayer_input.gd"
 GameManager="*res://Scripts/game_manager.gd"
-ControllerIcons="*res://addons/controller_icons/ControllerIcons.gd"
 PlayerManager="*res://Scripts/player_manager.gd"
 
 [display]
