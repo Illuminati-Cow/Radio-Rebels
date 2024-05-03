@@ -1,8 +1,9 @@
 class_name RumbleMinigame extends IMinigame
 
 @onready var root = get_tree().current_scene
-@onready var player_object = load("res://Resources/rumble_player.tscn")
-@onready var tower_object = load("res://Resources/transmission_tower.tscn")
+@onready var player_object = load("res://Resources/RumbleMinigame/rumble_player.tscn")
+@onready var tower_object = load("res://Resources/RumbleMinigame/transmission_tower.tscn")
+@onready var game_timer = root.find_child("Timer")
 
 var players_count : int
 var current_players : int
@@ -10,15 +11,25 @@ var players := {
 	
 }
 
+#print(root)
+#var game_timer : SceneTreeTimer
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	players_count = 2#PlayerManager.get_player_count()
+	#game_timer = get_tree().create_timer(30)
+	#print(game_timer.time_left)
+	#game_timer.paused = true
+	#game_timer.stop()
+	players_count = 1#PlayerManager.get_player_count()
 	current_players = players_count
 	await get_tree().create_timer(0.2).timeout
-	PlayerManager.join(0)
+	PlayerManager.join(-1)
+	if players_count > 1:
+		for i in (players_count-1):
+			PlayerManager.join(i)
 	super.setup(players_count)
-	start() #the following I think should only start after the player presses a button to close the controls screen Edit: it doesn't wait, apparently - not sure why
+	get_tree().paused = true
+	await super.start() #the following I think should only start after the player presses a button to close the controls screen Edit: it doesn't wait, apparently - not sure why
 	print("test")
 	print(_devices)
 	
@@ -42,14 +53,27 @@ func _ready():
 		players[device].device_num = _devices[device]
 		players[device].position = Vector2(j*2*192+400, 2*192+400)
 		#print(players[i].player_id)
+	
+	get_tree().paused = false
+	game_timer.paused = false
+	game_timer.start(30)
 			
 	
 func _player_eliminated():
-	current_players == current_players - 1
+	print("player eliminated")
+	current_players = current_players - 1
+	print("current players:")
+	print(current_players)
 	if current_players <= 1:
+		print("minigame over")
 		minigame_over.emit()
 		get_tree().change_scene_to_file("res://Scenes/transition_scene.tscn")
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	pass
+	#pass
+	print(game_timer.time_left)
+	if game_timer.time_left < 0.001:
+		print("minigame over")
+		minigame_over.emit()
+		get_tree().change_scene_to_file("res://Scenes/transition_scene.tscn")
