@@ -50,8 +50,8 @@ func _pick_next_game():
 func _change_to_next_game():
 	print("changing game to ")
 	print(next_game)
-	assert(games_dict["pulse"] != null)
-	get_tree().change_scene_to_packed(games_dict["pulse"])
+	assert(games_dict["rumble"] != null)
+	get_tree().change_scene_to_packed(games_dict["rumble"])
 
 
 func _on_player_joined(player : int):

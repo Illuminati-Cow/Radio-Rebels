@@ -42,8 +42,10 @@ func _process(delta):
 		held_count += 1000*delta #add the number of milliseconds since the last frame
 		if held_count >= 1000:
 			held_count = 0
-			position.x = position.x + (192 * x_axis)
-			position.y = position.y + (192 * y_axis)
+			if (position.x)+(192 * x_axis) <= (4*192 + 400) && (position.x)+(192 * x_axis) >= (400):
+				position.x = position.x + (192 * x_axis)
+			if (position.y)+(192 * y_axis) <= (4*192 + 400) && (position.y)+(192 * y_axis) >= (400):
+				position.y = position.y + (192 * y_axis)
 	else:
 		x_axis = 0
 		y_axis = 0
