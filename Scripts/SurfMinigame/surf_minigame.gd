@@ -1,8 +1,8 @@
 class_name SurfMinigame extends IMinigame
 
 #region Constants
-const CURVE_RES = 1000
-const BAKE_RESOLUTION_PX = 5
+const CURVE_RES = 100
+const BAKE_RESOLUTION_PX = 10
 #endregion
 @export_group("Player")
 @export var player_res : PackedScene
@@ -13,10 +13,15 @@ const BAKE_RESOLUTION_PX = 5
 @export var difficulty_max_time : float
 @export_group("Camera")
 @export var zoom_factor := 1
-@onready var camera = $Camera2D as Camera2D
+@onready var camera = %Camera as GroupTrackingCamera
 var _players : Array[SurfPlayer]
 var terrain_pool : Array[Terrain] = []
 var _time : float = 0
+var _game_started := false
+var _spawn_flip := 1
+## Used to weight camera tracking towards player in first and to show the 
+## ground when players are airborne
+var _winner_trackpoint := Node2D.new()
 
 
 func _ready():
@@ -27,22 +32,28 @@ func _ready():
 func setup(player_count : int) -> void:
 	PlayerManager.join(-1)
 	super.setup(player_count)
-	_spawn_terrain_piece($Spawnpoint.global_position - Vector2(1000, 0), 1000, -800)
-	var flip = 1
-	for i in range(10):
+	_spawn_terrain_piece($Spawnpoint.global_position - Vector2(2500, 0), 1000, -800)
+	for i in range(20):
 		_spawn_terrain_piece(terrain_pool[-1].visual.get_node("Spawnpoint").global_position, \
-			1000, 800 * flip)
-		flip = -flip
+			1000, 800 * _spawn_flip)
+		_spawn_flip = -_spawn_flip
 	for id in _devices:
 		var device = _devices[id] as int
 		var player := player_res.instantiate() as SurfPlayer
 		player.init(device, self)
 		player.name = "Player %d" % id
-		player.position = $Spawnpoint.position + Vector2(0, -500)
-		player.set_process(false)
+		player.position = $Spawnpoint.position + Vector2(100, -500)
 		add_child(player, true)
 		_players.append(player)
-	start()
+		camera.targets.append(player)
+	camera.make_current()
+	
+	add_child(_winner_trackpoint)
+	_winner_trackpoint.position.y = 0
+	# Add twice to increase weight
+	camera.targets.append(_winner_trackpoint)
+	#camera.targets.append(_winner_trackpoint)
+	await start()
 
 
 func start():
@@ -51,17 +62,22 @@ func start():
 	_time = 0
 	for player in _players:
 		player.set_process(true)
+	_game_started = true
 
 
 func height_at_point(position: Vector2, curve: QuadBezier = null) -> Vector2:
 	if not curve:
 		curve = _get_curve(position)
+	assert(curve)
 	var interp = curve.get_t_value(position)
-	return curve.sample(interp)
-
+	var sample = curve.sample(interp * curve.length)
+	return sample
+	
+	
 func normal_at_point(position: Vector2, curve: QuadBezier = null) -> Vector2:
 	if not curve:
 		curve = _get_curve(position)
+	assert(curve)
 	var interp = curve.get_t_value(position)
 	return curve.normal_at_sample(interp)
 
@@ -70,15 +86,23 @@ func get_curve_at_point(position: Vector2) -> QuadBezier:
 	return _get_curve(position)
 
 
-func _get_curve(position: Vector2) -> QuadBezier:
+func _get_curve(pos: Vector2) -> QuadBezier:
 	for terrain in terrain_pool:
-		var t := terrain.curve.get_t_value(position) as float
-		if t >= 0 and t <= 1:
-			return terrain.curve
+		var curve = terrain.curve
+		if pos.x < curve.end.x and pos.x >= curve.start.x:
+			return curve
 	return null
 
 
+func _leading_player() -> SurfPlayer:
+	var p = _players.duplicate()
+	p.sort_custom(func (p1, p2): return p1.position.x > p2.position.x)
+	return _players[0]
+
+
 func _process(delta):
+	if not _game_started:
+		return
 	# Update game state
 	_time += delta
 	safe_angle = Tween.interpolate_value(max_safe_angle, min_safe_angle - max_safe_angle,\
@@ -88,31 +112,41 @@ func _process(delta):
 	# Update terrain
 	if terrain_pool.is_empty():
 		return
-	if terrain_pool[0].visual.position.x < camera.position.x - 4000:
-		terrain_pool.push_back(terrain_pool.pop_front())
-		terrain_pool[-1].position = \
-			terrain_pool[-2].visual.get_node("Spawnpoint").global_position
+	if terrain_pool[0].position.x < camera.position.x - 5000:
+		var terrain := terrain_pool.pop_front() as Terrain
+		terrain.queue_free()
+		_spawn_terrain_piece(terrain_pool[-1].visual.get_node("Spawnpoint").global_position, \
+			1000, 800 * _spawn_flip)
+		_spawn_flip = -_spawn_flip
+	# Update trackpoints
+	_winner_trackpoint.position.x = _leading_player().position.x
 
 
 func _spawn_terrain_piece(start : Vector2, w : float, h : float) -> void:
 	var apex := Vector2(start.x + w / 2, start.y + h)
 	var end := Vector2(start.x + w, start.y)
 	var curve := QuadBezier.new(start, apex, end)
-	var visual := curve.create_visual(1000, Color.GREEN)
+	var visual := curve.create_visual(3000, Color.GREEN)
 	add_child(visual)
 	terrain_pool.append(Terrain.new(curve, visual))
 
 
-class Terrain:
-	var curve
-	var visual
+class Terrain extends Node:
+	var curve : QuadBezier
+	var visual : Polygon2D
+	var position := Vector2.ZERO :
+		get:
+			return curve.end
+		set(value):
+			curve.translate(value)
+			visual.position = value
 	
 	func _init(bezier_curve: QuadBezier, bezier_visual):
 		curve = bezier_curve
 		visual = bezier_visual
 
 
-class QuadBezier:
+class QuadBezier extends Node:
 	var start := Vector2.ZERO
 	var mid := Vector2.ZERO
 	var end := Vector2.ZERO
@@ -132,8 +166,12 @@ class QuadBezier:
 		curve.add_point(end)
 	
 	
+	func translate(vector: Vector2):
+		_init(start + vector, mid + vector, end + vector)
+	
+	
 	func sample(t: float) -> Vector2:
-		return curve.sample_baked(t, false)
+		return curve.sample_baked(t, true)
 	
 	
 	# Source: https://stackoverflow.com/a/39426346
@@ -164,7 +202,7 @@ class QuadBezier:
 		poly.polygon = points
 		# Spawnpoint for next curve
 		var spawnpoint = Marker2D.new()
-		spawnpoint.position = end
+		spawnpoint.position = Vector2(end.x - 2, end.y)
 		spawnpoint.name = "Spawnpoint"
 		poly.add_child(spawnpoint, true)
 		
