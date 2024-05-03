@@ -1,7 +1,34 @@
-[gd_resource type="Theme" load_steps=2 format=3 uid="uid://3hg1ewgjleni"]
+[gd_resource type="Theme" load_steps=5 format=3 uid="uid://3hg1ewgjleni"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_r1thn"]
+bg_color = Color(0.385036, 0.723738, 0.900911, 1)
+border_width_bottom = 5
+border_color = Color(0.0784314, 0.396078, 0.592157, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wnepe"]
+bg_color = Color(0.302201, 0.658323, 0.838798, 1)
+border_width_bottom = 5
+border_color = Color(0.0784314, 0.396078, 0.592157, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_k3v5c"]
+bg_color = Color(0.229512, 0.571227, 0.739373, 1)
+border_width_bottom = 5
+border_color = Color(0.0784314, 0.396078, 0.592157, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ofpq0"]
-bg_color = Color(0.239216, 0.74902, 0.27451, 0.870588)
+bg_color = Color(0.336177, 0.70789, 0.640647, 0.870588)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
@@ -17,6 +44,9 @@ shadow_offset = Vector2(1, 1)
 
 [resource]
 default_font_size = 16
+Button/styles/hover = SubResource("StyleBoxFlat_r1thn")
+Button/styles/normal = SubResource("StyleBoxFlat_wnepe")
+Button/styles/pressed = SubResource("StyleBoxFlat_k3v5c")
 ControlLabel/base_type = &"Label"
 ControlLabel/font_sizes/font_size = 20
 ControlLabel/styles/normal = SubResource("StyleBoxFlat_ofpq0")

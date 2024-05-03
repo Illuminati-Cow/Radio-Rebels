@@ -1,4 +1,9 @@
-[gd_scene format=3 uid="uid://bn5ncc2037osr"]
+[gd_scene load_steps=4 format=3 uid="uid://bn5ncc2037osr"]
+
+[ext_resource type="Texture2D" uid="uid://b1jpsctfery4k" path="res://Assets/ripple.png" id="1_qiun4"]
+[ext_resource type="Texture2D" uid="uid://bssfplua4e13h" path="res://Assets/ring.png" id="2_2cl15"]
+
+[sub_resource type="Theme" id="Theme_f0t11"]
 
 [node name="ControlsScreen" type="Control"]
 layout_mode = 3
@@ -17,6 +22,22 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 0.105882)
 
+[node name="BackgroundRipple" type="TextureRect" parent="."]
+modulate = Color(0, 0.941176, 0.882353, 0.164706)
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -1517.0
+offset_top = -1057.0
+offset_right = -239.0
+offset_bottom = -36.0
+grow_horizontal = 0
+grow_vertical = 0
+texture = ExtResource("1_qiun4")
+
 [node name="GridContainer" type="GridContainer" parent="."]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 1
@@ -25,6 +46,10 @@ anchor_left = 0.5
 anchor_top = 0.25
 anchor_right = 0.5
 anchor_bottom = 0.64
+offset_left = -100.0
+offset_top = 147.0
+offset_right = 100.0
+offset_bottom = -62.2
 grow_horizontal = 2
 grow_vertical = 2
 columns = 2
@@ -33,10 +58,11 @@ columns = 2
 custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 size_flags_vertical = 1
-text = "Mega-Punch"
+text = "Join"
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
+uppercase = true
 
 [node name="Label2" type="Label" parent="GridContainer"]
 layout_mode = 2
@@ -50,14 +76,16 @@ vertical_alignment = 1
 custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 size_flags_vertical = 1
-text = "Mega-Punch"
+text = "Start"
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
+uppercase = true
 
 [node name="Label4" type="Label" parent="GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+theme = SubResource("Theme_f0t11")
 theme_type_variation = &"ControlLabel"
 text = "A"
 horizontal_alignment = 1
@@ -67,16 +95,17 @@ vertical_alignment = 1
 custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 size_flags_vertical = 1
-text = "Mega-Punch"
+text = "Jump"
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
+uppercase = true
 
 [node name="Label6" type="Label" parent="GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_type_variation = &"ControlLabel"
-text = "A"
+text = "W"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -84,10 +113,11 @@ vertical_alignment = 1
 custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 size_flags_vertical = 1
-text = "Mega-Punch"
+text = "Move Left"
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
+uppercase = true
 
 [node name="Label8" type="Label" parent="GridContainer"]
 layout_mode = 2
@@ -101,16 +131,17 @@ vertical_alignment = 1
 custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 size_flags_vertical = 1
-text = "Mega-Punch"
+text = "Move Down"
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
+uppercase = true
 
 [node name="Label10" type="Label" parent="GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_type_variation = &"ControlLabel"
-text = "A"
+text = "S"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -118,15 +149,57 @@ vertical_alignment = 1
 custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 size_flags_vertical = 1
-text = "Mega-Punch"
+text = "Move Right"
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
+uppercase = true
 
 [node name="Label12" type="Label" parent="GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_type_variation = &"ControlLabel"
-text = "A"
+text = "D"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="Ring" type="TextureRect" parent="."]
+modulate = Color(0.137255, 1, 0.133333, 0.8)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -601.0
+offset_top = -354.0
+offset_right = 630.0
+offset_bottom = 338.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_2cl15")
+
+[node name="Ripple1" type="TextureRect" parent="."]
+modulate = Color(0.0823529, 0.807843, 1, 0.337255)
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -499.0
+offset_right = 603.0
+grow_vertical = 0
+texture = ExtResource("1_qiun4")
+flip_h = true
+
+[node name="Ripple2" type="TextureRect" parent="."]
+modulate = Color(0.363109, 0.686553, 0.434269, 0.466667)
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -603.0
+offset_bottom = 499.0
+grow_horizontal = 0
+texture = ExtResource("1_qiun4")
+flip_h = true
+flip_v = true

@@ -5,7 +5,6 @@ var rumble_game = preload("res://Scenes/rumble.tscn")
 var pulse_game = preload("res://Scenes/pulse.tscn")
 var surf_game = preload("res://Scenes/surf.tscn")
 
-
 var games_dict = {
 	"rumble" : rumble_game,
 	"pulse" : pulse_game,

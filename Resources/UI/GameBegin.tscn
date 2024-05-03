@@ -1,0 +1,53 @@
+[gd_scene load_steps=3 format=3 uid="uid://bump5x1bsl2lv"]
+
+[ext_resource type="Texture2D" uid="uid://5m0foi820iv" path="res://Assets/backgroundfinal.webp" id="1_pikv8"]
+[ext_resource type="Theme" uid="uid://3hg1ewgjleni" path="res://Resources/UI/default_theme.tres" id="2_gqskf"]
+
+[node name="GameBegin" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+
+[node name="TextureRect" type="TextureRect" parent="."]
+modulate = Color(0.268668, 0.682617, 0.464032, 0.988235)
+layout_mode = 1
+offset_right = 1920.0
+offset_bottom = 1081.0
+texture = ExtResource("1_pikv8")
+expand_mode = 1
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 710.0
+offset_top = 439.0
+offset_right = 1328.0
+offset_bottom = 576.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.67451, 0.976471, 0.635294, 0.976471)
+theme_override_font_sizes/font_size = 100
+text = "Radio Rebels"
+uppercase = true
+
+[node name="Buttons" type="VBoxContainer" parent="."]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 1
+offset_left = 930.0
+offset_top = 611.0
+offset_right = 1080.0
+offset_bottom = 671.0
+alignment = 1
+
+[node name="CloseButton" type="Button" parent="Buttons"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_gqskf")
+text = "Start"
+
+[node name="MenuButton" type="Button" parent="Buttons"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_gqskf")
+text = "Main Menu"
