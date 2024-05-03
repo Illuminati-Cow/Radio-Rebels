@@ -4,7 +4,7 @@ extends Node2D
 var rumble_game = preload("res://Scenes/rumble.tscn")
 var pulse_game = preload("res://Scenes/pulse.tscn")
 var surf_game = preload("res://Scenes/surf.tscn")
-
+var transition_scene = preload("res://Scenes/transition_scene.tscn")
 
 var games_dict = {
 	"rumble" : rumble_game,
@@ -50,8 +50,12 @@ func _pick_next_game():
 func _change_to_next_game():
 	print("changing game to ")
 	print(next_game)
-	assert(games_dict["rumble"] != null)
-	get_tree().change_scene_to_packed(games_dict["rumble"])
+	assert(games_dict[next_game] != null)
+	get_tree().change_scene_to_packed(games_dict[next_game])
+
+
+func _transition():
+	get_tree().change_scene_to_packed(transition_scene)
 
 
 func _on_player_joined(player : int):
@@ -64,3 +68,9 @@ func _on_player_left(player : int):
 	# Do something
 	print_debug("Player " + str(player) + " left")
 	pass
+
+
+func _on_minigame_over(scores):
+	for id in scores:
+		_modify_score(id, scores[id])
+	_transition()
