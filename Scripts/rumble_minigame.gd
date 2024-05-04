@@ -42,7 +42,7 @@ func _ready():
 	var t
 	for i in 5:	
 		for j in 5:
-			t = tower_object.instantiate() as TransmissionTower
+			t = tower_object.instantiate() as TransmissionTower2
 			root.add_child(t)
 			(t.position).x = i*192 + 400
 			(t.position).y = j*192 + 400
