@@ -5,6 +5,7 @@ class_name RumbleMinigame extends IMinigame
 @onready var tower_object = load("res://Resources/transmission_tower.tscn")
 
 var players_count : int
+var current_players : int
 var players := {
 	
 }
@@ -16,12 +17,11 @@ var scores := {
 var eliminated_players = []
 
 #print(root)
-#var game_timer : SceneTreeTimer
+var game_timer : Timer
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	players_count = 1#PlayerManager.get_player_count()
-  current_players = players_count
+	players_count = PlayerManager.get_player_count()
 	setup(players_count)
 	await start() #the following I think should only start after the player presses a button to close the controls screen Edit: it doesn't wait, apparently - not sure why
 	print("test")
@@ -60,6 +60,7 @@ func _ready():
 	game_timer.paused = false
 	game_timer.start(30)
 	game_timer.timeout.connect(_on_game_time_out)
+	current_players = players_count
 			
 	
 func _player_eliminated(device):

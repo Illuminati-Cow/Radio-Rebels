@@ -1,13 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://cqii6mimed067"]
+[gd_scene load_steps=5 format=3 uid="uid://cqii6mimed067"]
 
 [ext_resource type="Script" path="res://Scripts/SurfMinigame/surf_minigame.gd" id="1_6fsol"]
 [ext_resource type="PackedScene" uid="uid://ds1q6ranfqm7d" path="res://Resources/SurfMinigame/surf_player.res" id="2_rnj38"]
 [ext_resource type="PackedScene" uid="uid://dfqckn503ujex" path="res://Resources/SurfMinigame/surf_minigame_controls.tscn" id="3_hsljn"]
 [ext_resource type="PackedScene" uid="uid://bsq2r3ttc5exq" path="res://Resources/UI/PauseMenu.tscn" id="4_u7d5h"]
-[ext_resource type="Script" path="res://Scripts/SurfMinigame/group_tracking_camera.gd" id="5_hcuwh"]
 
 [node name="Surf" type="Node2D"]
-position = Vector2(2, 0)
 script = ExtResource("1_6fsol")
 player_res = ExtResource("2_rnj38")
 difficulty_max_time = 60.0
@@ -36,15 +34,11 @@ offset_right = 120.0
 grow_vertical = 0
 text = "Spawn Terrain"
 
-[node name="Spawnpoint" type="Marker2D" parent="."]
-position = Vector2(-910, -268)
-
-[node name="Camera" type="Camera2D" parent="."]
-unique_name_in_owner = true
-position = Vector2(-9, 7)
+[node name="Camera2D" type="Camera2D" parent="."]
+position_smoothing_enabled = true
 editor_draw_drag_margin = true
-script = ExtResource("5_hcuwh")
-tracking_power = 0.15
-max_zoom = 1
+
+[node name="Spawnpoint" type="Marker2D" parent="."]
+position = Vector2(-930, -202)
 
 [connection signal="pressed" from="CanvasLayer/Control/Button" to="." method="_on_button_pressed"]

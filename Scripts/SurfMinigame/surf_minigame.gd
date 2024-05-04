@@ -27,11 +27,10 @@ var _winner_trackpoint := Node2D.new()
 
 func _ready():
 	await get_tree().create_timer(0.15).timeout
-	setup(1)
+	setup(PlayerManager.get_player_count())
 
 
 func setup(player_count : int) -> void:
-	PlayerManager.join(-1)
 	super.setup(player_count)
 	_spawn_terrain_piece($Spawnpoint.global_position - Vector2(2500, 0), 1000, -800)
 	for i in range(20):

@@ -43,7 +43,7 @@ shadow_size = 2
 shadow_offset = Vector2(1, 1)
 
 [resource]
-default_font_size = 16
+default_font_size = 50
 Button/styles/hover = SubResource("StyleBoxFlat_ixgsh")
 Button/styles/normal = SubResource("StyleBoxFlat_bs1hp")
 Button/styles/pressed = SubResource("StyleBoxFlat_88msw")
