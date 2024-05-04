@@ -152,7 +152,8 @@ class Terrain extends Node:
 		set(value):
 			curve.translate(value)
 			visual.position = value
-	
+
+
 	func _init(bezier_curve: QuadBezier, bezier_visual):
 		curve = bezier_curve
 		visual = bezier_visual
@@ -166,7 +167,8 @@ class QuadBezier extends Node:
 	var length : float :
 		get:
 			return curve.get_baked_length()
-	
+
+
 	func _init(start_point: Vector2, mid_point: Vector2, end_point: Vector2):
 		start = start_point
 		mid = mid_point
