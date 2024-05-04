@@ -8,7 +8,6 @@ class_name RumblePlayer extends Area2D
 #}
 
 @export var player_id := -1 as int
-@export var device_num = 0
 @export var entered_tower_time := 0 as float
 signal destroyed_other_player (player : int)
 var overlapping_player := false as bool
@@ -33,27 +32,25 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	#print(player_id)
-	var direction = MultiplayerInput.get_vector(device_num, "move_right", "move_left", "move_up", "move_down")
-	#print(direction)
+	var direction = MultiplayerInput.get_vector(PlayerManager.get_player_device(player_id), "move_right", "move_left", "move_up", "move_down")
+	print(direction)
 	if direction != Vector2(0, 0):
-		#print(player_id)
-		#print("holding direction")
-		if abs(direction.x) >= abs(direction.y):
-			x_axis = -1 * (direction.x/abs(direction.x)) #this expression gets the sign of the direction
+		print(player_id)
+		print("holding direction")
+		if (direction.x).abs() >= (direction.y).abs():
+			x_axis = 1 * (direction.x/((direction.x).abs())) #this expression gets the sign of the direction
 			y_axis = 0
 			_indicator.start_charging(90 if x_axis == 1 else -90)
 		else:
-			y_axis = 1 * (direction.y/abs(direction.y)) #this expression gets the sign of the direction
+			y_axis = 1 * (direction.y/((direction.y).abs())) #this expression gets the sign of the direction
 			x_axis = 0
 			_indicator.start_charging(-180 if y_axis == 1 else 0)
 		
 		held_count += 1000*delta #add the number of milliseconds since the last frame
 		if held_count >= 1000:
 			held_count = 0
-			if (position.x)+(192 * x_axis) <= (4*192 + 400) && (position.x)+(192 * x_axis) >= (400):
-				position.x = position.x + (192 * x_axis)
-			if (position.y)+(192 * y_axis) <= (4*192 + 400) && (position.y)+(192 * y_axis) >= (400):
-				position.y = position.y + (192 * y_axis)
+			position.x = position.x + (64 * x_axis)
+			position.y = position.y + (64 * y_axis)
 	else:
 		x_axis = 0
 		y_axis = 0
@@ -61,10 +58,8 @@ func _process(delta):
 		_indicator.stop_charging()
 
 func _on_RumblePlayer_area_entered(area):
-	if area.is_in_group("towers"):
+	if area.is_in_group("tower"):
 		entered_tower_time = Time.get_ticks_msec()
-		print("entered tower at:")
-		print(entered_tower_time)
 	if area.is_in_group("player"):
 		print ("overlapping other player")
 		overlapping_player = true
