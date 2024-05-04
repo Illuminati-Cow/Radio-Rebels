@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3 uid="uid://dxki6r21hv2us"]
+
+[ext_resource type="Script" path="res://Resources/RumbleMinigame/charge_indicator.gd" id="1_h27uv"]
+
+[node name="ChargeIndicator" type="Polygon2D"]
+rotation = -0.0022672
+scale = Vector2(5, 5)
+color = Color(0.333333, 0.560784, 0.266667, 1)
+polygon = PackedVector2Array(-1, 0, 1, 0, 1, -2, 2, -5, 0, -8, 1, -11, -1, -11, -2, -8, 0, -5, -1, -2)
+script = ExtResource("1_h27uv")
+
+[node name="Arrow" type="Polygon2D" parent="."]
+color = Color(0.333333, 0.560784, 0.266667, 1)
+polygon = PackedVector2Array(-1, -11, -3, -11, 0, -15, 3, -11, 1, -11)

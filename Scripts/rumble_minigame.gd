@@ -54,7 +54,7 @@ func _ready():
 		root.add_child(players[id])
 		print("instantiated player")
 		players[id].device_num = _devices[id]
-		players[id].position = Vector2(j*2*192+400, 2*192+400)
+		players[id].position = Vector2(j*2*192+400, 2*192+340)
 		scores[id] = players_count
 	
 	get_tree().paused = false

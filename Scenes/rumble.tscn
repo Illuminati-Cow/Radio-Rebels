@@ -1,14 +1,44 @@
-[gd_scene load_steps=5 format=3 uid="uid://b58xtql0vvl51"]
+[gd_scene load_steps=8 format=3 uid="uid://b58xtql0vvl51"]
 
 [ext_resource type="Script" path="res://Scripts/rumble_minigame.gd" id="1_0unq1"]
 [ext_resource type="PackedScene" uid="uid://blqkcoim7s0kj" path="res://Scenes/ControlsScreenRumble.tscn" id="2_cruwo"]
 [ext_resource type="PackedScene" uid="uid://bsq2r3ttc5exq" path="res://Resources/UI/PauseMenu.tscn" id="3_c8tgi"]
 [ext_resource type="PackedScene" uid="uid://bcu4hi8q44nsw" path="res://Resources/RumbleMinigame/transmission_tower.tscn" id="4_n51ah"]
 
+[sub_resource type="Gradient" id="Gradient_v8qpb"]
+colors = PackedColorArray(0.789394, 0.584819, 0.349537, 1, 1, 0.792157, 0.219608, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_hvgxu"]
+frequency = 0.0025
+offset = Vector3(83.33, 248.1, -291.67)
+fractal_type = 3
+fractal_weighted_strength = 0.33
+domain_warp_enabled = true
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_l8vse"]
+width = 1920
+height = 1080
+generate_mipmaps = false
+seamless = true
+color_ramp = SubResource("Gradient_v8qpb")
+noise = SubResource("FastNoiseLite_hvgxu")
+
 [node name="Rumble" type="Node2D"]
 script = ExtResource("1_0unq1")
 controls_screen = ExtResource("2_cruwo")
 pause_screen = ExtResource("3_c8tgi")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -1542.0
+offset_top = -210.0
+offset_right = 2298.0
+offset_bottom = 1950.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("NoiseTexture2D_l8vse")
 
 [node name="TransmissionTower" parent="." instance=ExtResource("4_n51ah")]
 visible = false

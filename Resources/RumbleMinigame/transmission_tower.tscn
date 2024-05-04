@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://bcu4hi8q44nsw"]
 
-[ext_resource type="Texture2D" uid="uid://brps5rykdgmmr" path="res://icon.svg" id="1_0sxsq"]
 [ext_resource type="Script" path="res://Resources/RumbleMinigame/transmission_tower.gd" id="1_kol4n"]
+[ext_resource type="Texture2D" uid="uid://b15qid1awgx2i" path="res://Assets/RadioTower.png" id="2_cwnot"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_w1x83"]
 
@@ -9,7 +9,8 @@
 script = ExtResource("1_kol4n")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("1_0sxsq")
+scale = Vector2(0.0617423, 0.0617423)
+texture = ExtResource("2_cwnot")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 scale = Vector2(4, 4)
