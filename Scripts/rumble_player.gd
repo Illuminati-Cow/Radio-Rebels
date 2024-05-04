@@ -13,12 +13,20 @@ signal destroyed_other_player (player : int)
 var overlapping_player := false as bool
 var x_axis := 0 as float
 var y_axis := 0 as float
-
 var held_count := 0 as float
+var _indicator : ChargeIndicator
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
+	var rumble_node = get_tree().current_scene#).find_child("Rumble")
+	destroyed_other_player.connect(rumble_node._player_eliminated)
+	_indicator = load("res://Resources/RumbleMinigame/charge_indicator.tscn").instantiate() as ChargeIndicator
+	add_child(_indicator)
+	_indicator.position = Vector2.ZERO
+	_indicator.hide()
+	var fade_tween = create_tween().set_loops()
+	fade_tween.tween_property(self, "modulate:a", 0.6, 0.2)
+	fade_tween.tween_property(self, "modulate:a", 1, 0.2)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -32,9 +40,11 @@ func _process(delta):
 		if (direction.x).abs() >= (direction.y).abs():
 			x_axis = 1 * (direction.x/((direction.x).abs())) #this expression gets the sign of the direction
 			y_axis = 0
+			_indicator.start_charging(90 if x_axis == 1 else -90)
 		else:
 			y_axis = 1 * (direction.y/((direction.y).abs())) #this expression gets the sign of the direction
 			x_axis = 0
+			_indicator.start_charging(-180 if y_axis == 1 else 0)
 		
 		held_count += 1000*delta #add the number of milliseconds since the last frame
 		if held_count >= 1000:
@@ -45,6 +55,7 @@ func _process(delta):
 		x_axis = 0
 		y_axis = 0
 		held_count = 0
+		_indicator.stop_charging()
 
 func _on_RumblePlayer_area_entered(area):
 	if area.is_in_group("tower"):
