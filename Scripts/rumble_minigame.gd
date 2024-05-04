@@ -29,10 +29,9 @@ func _ready():
 	players_count = 1#PlayerManager.get_player_count()
 	current_players = players_count
 	await get_tree().create_timer(0.2).timeout
-	PlayerManager.join(-1)
-	if players_count > 1:
-		for i in (players_count-1):
-			PlayerManager.join(i)
+	# WARNING: DEBUG
+	for device in PlayerManager.get_unjoined_devices():
+		PlayerManager.join(device)
 	super.setup(players_count)
 	get_tree().paused = true
 	await super.start() #the following I think should only start after the player presses a button to close the controls screen Edit: it doesn't wait, apparently - not sure why
@@ -42,28 +41,26 @@ func _ready():
 	var t
 	for i in 5:	
 		for j in 5:
-			t = tower_object.instantiate() as TransmissionTower2
+			t = tower_object.instantiate() as TransmissionTower
 			root.add_child(t)
 			(t.position).x = i*192 + 400
 			(t.position).y = j*192 + 400
 			#print(t.position)
 
 	var j = 0
-	for device in (_devices):
+	for id in (_devices):
 		j = j+1
-		players[device] = player_object.instantiate() as RumblePlayer
-		root.add_child(players[device])
+		players[id] = player_object.instantiate() as RumblePlayer
+		root.add_child(players[id])
 		print("instantiated player")
-		#print(i)
-		#players[devices].player_id = i
-		players[device].device_num = _devices[device]
-		players[device].position = Vector2(j*2*192+400, 2*192+400)
-		#print(players[i].player_id)
-		scores[device] = players_count
+		players[id].device_num = _devices[id]
+		players[id].position = Vector2(j*2*192+400, 2*192+400)
+		scores[id] = players_count
 	
 	get_tree().paused = false
 	game_timer.paused = false
 	game_timer.start(30)
+	game_timer.timeout.connect(_on_game_time_out)
 			
 	
 func _player_eliminated(device):
@@ -84,14 +81,12 @@ func _player_eliminated(device):
 		minigame_over.emit(scores)
 		#get_tree().change_scene_to_file("res://Scenes/transition_scene.tscn")
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	#pass
+
+func _on_game_time_out():
 	print(game_timer.time_left)
 	if game_timer.time_left < 0.001:
-		print("minigame over")
-		var places = players_count-eliminated_players.size()
-		for i in places:
-			scores[eliminated_players.pop_back()] = players_count-i
-		minigame_over.emit(scores)
-		#get_tree().change_scene_to_file("res://Scenes/transition_scene.tscn")
+			print("minigame over")
+			var places = players_count-eliminated_players.size()
+			for i in places:
+				scores[eliminated_players.pop_back()] = players_count-i
+			minigame_over.emit(scores)
