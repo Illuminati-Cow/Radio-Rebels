@@ -11,7 +11,7 @@ size = Vector2(6000, 8000)
 
 [sub_resource type="Gradient" id="Gradient_aw5rr"]
 offsets = PackedFloat32Array(0, 0.954545, 1)
-colors = PackedColorArray(0, 0, 0, 1, 0.300906, 0.980668, 0, 1, 1, 1, 1, 1)
+colors = PackedColorArray(0, 0, 0, 1, 0.98, 0.3038, 0.3038, 1, 1, 1, 1, 1)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_e8840"]
 gradient = SubResource("Gradient_aw5rr")
@@ -25,8 +25,10 @@ difficulty_max_time = 60.0
 controls_screen = ExtResource("3_hsljn")
 pause_screen = ExtResource("4_u7d5h")
 
-[node name="DeathWall" type="Area2D" parent="."]
-position = Vector2(-4625, 32)
+[node name="DeathWall" type="Area2D" parent="." groups=["DeathWall"]]
+z_index = 1
+position = Vector2(-4685, -4243)
+scale = Vector2(1, 3)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="DeathWall"]
 shape = SubResource("RectangleShape2D_bjf1j")

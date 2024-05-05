@@ -11,8 +11,8 @@ var games_dict = {
 	"surf" : surf_game,
 }
 
-var games_count := 3 as int
-var current_game := 0 as int
+var games_count := 2 as int
+var current_game := ""
 var next_game_num := 0 as int
 var next_game: String
 
@@ -40,7 +40,7 @@ func _pick_next_game():
 	assert(rumble_game != null)
 	assert(surf_game != null)
 	
-	var dict_array = games_dict.keys()
+	var dict_array = games_dict.keys().filter(func (g): return g != current_game)
 	next_game = dict_array.pick_random()
 	
 	
@@ -48,6 +48,7 @@ func _change_to_next_game():
 	print("changing game to ")
 	print(next_game)
 	assert(games_dict[next_game] != null)
+	current_game = next_game
 	get_tree().change_scene_to_packed(games_dict[next_game])
 
 

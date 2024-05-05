@@ -17,6 +17,8 @@ signal minigame_over(scores)
 @export var controls_screen_accept_action : String = "ui_accept"
 ## The scene that appears when the game is paused. Should have its own logic.
 @export var pause_screen : PackedScene
+@export var player_colors = [Color("31CEE3"), Color("FF5050"), Color("72F399"), Color("FFE74D"),\
+		Color("FF50F7"), Color("AC47EB")]
 
 var _player_count : int
 var _devices = {}

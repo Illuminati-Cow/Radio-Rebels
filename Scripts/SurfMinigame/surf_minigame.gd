@@ -7,8 +7,8 @@ const BAKE_RESOLUTION_PX = 10
 @export_group("Player")
 @export var player_res : PackedScene
 @export var base_speed := 10
-@export var max_safe_angle := 90.0
-@export var min_safe_angle := 25.0
+@export var max_safe_angle := 70.0
+@export var min_safe_angle := 20.0
 @export var safe_angle : float
 @export var difficulty_max_time : float
 @export_group("Camera")
@@ -44,6 +44,7 @@ func setup(player_count : int) -> void:
 		player.init(device, id, self)
 		player.name = "Player %d" % id
 		player.position = $Spawnpoint.position + Vector2(100, -500)
+		player.modulate = player_colors[id]
 		add_child(player, true)
 		_players.append(player)
 		camera.targets.append(player)
@@ -93,7 +94,7 @@ func _get_curve(pos: Vector2) -> QuadBezier:
 		var curve = terrain.curve
 		if pos.x < curve.end.x and pos.x >= curve.start.x:
 			return curve
-	return null
+	return terrain_pool[0].curve
 
 
 func _leading_player() -> SurfPlayer:
@@ -115,7 +116,7 @@ func _process(delta):
 	# Update terrain
 	if terrain_pool.is_empty():
 		return
-	if terrain_pool.front().position.x < camera.position.x - 3000:
+	if terrain_pool.front().position.x < $DeathWall.position.x - 2000:
 		var terrain := terrain_pool.pop_front() as Terrain
 		terrain.queue_free()
 		_spawn_terrain_piece(terrain_pool.back().visual.get_node("Spawnpoint").global_position, \
@@ -123,18 +124,13 @@ func _process(delta):
 		_spawn_flip = -_spawn_flip
 	# Update trackpoints
 	_winner_trackpoint.position.x = _leading_player().position.x
-	for player in _players:
-		var rect = get_viewport().get_visible_rect()
-		if player.global_position.x < rect.position.x - rect.size.x:
-			player.is_dead = true
-			_dead_players[player.id] = 1 + _dead_players.keys().size()
 	if _players.filter(func (p): return !p.is_dead).size() == 1:
 		Engine.time_scale = 0.2
-		await get_tree().create_timer(1).timeout
+		await get_tree().create_timer(1 * 0.2).timeout
 		Engine.time_scale = 1
 		minigame_over.emit(_dead_players)
 	# Move death wall
-	$DeathWall.position.x += Tween.interpolate_value(3, 8, _time, difficulty_max_time,\
+	$DeathWall.position.x += Tween.interpolate_value(5, 20, _time, difficulty_max_time,\
 			Tween.TRANS_LINEAR, Tween.EASE_IN)
 
 
@@ -142,9 +138,14 @@ func _spawn_terrain_piece(start : Vector2, w : float, h : float) -> void:
 	var apex := Vector2(start.x + w / 2, start.y + h)
 	var end := Vector2(start.x + w, start.y)
 	var curve := QuadBezier.new(start, apex, end)
-	var visual := curve.create_visual(3000, Color.GREEN)
+	var visual := curve.create_visual(10000, Color.GREEN)
 	add_child(visual)
 	terrain_pool.append(Terrain.new(curve, visual))
+
+
+func _on_player_dead(id: int):
+	_dead_players[id] = _dead_players.keys().size()
+	_players.pop_at(_players.find(id))
 
 
 class Terrain extends Node:

@@ -18,13 +18,13 @@ var eliminated_players = []
 
 #print(root)
 var game_timer : Timer = Timer.new()
-var _player_colors = [Color("31CEE3"), Color("FF5050"), Color("72F399"), Color("FFE74D")]
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	minigame_over.connect(GameManager._on_minigame_over)
 	players_count = PlayerManager.get_player_count()
 	setup(players_count)
+	_controls_screen.reparent($CanvasLayer)
 	await start()
 	for i in range(5):
 		for j in range(5):
@@ -41,7 +41,7 @@ func _ready():
 		add_child(players[id])
 		players[id].device_num = _devices[id]
 		players[id].position = Vector2(j*2*192+400, 2*192+340)
-		players[id].modulate = _player_colors[id]
+		players[id].modulate = player_colors[id]
 		scores[id] = players_count
 		j += 1
 	add_child(game_timer)
@@ -63,7 +63,7 @@ func _player_eliminated(device):
 		for i in places:
 			scores[eliminated_players.pop_back()] = players_count-i
 		Engine.time_scale = 0.2
-		await get_tree().create_timer(2).timeout
+		await get_tree().create_timer(2*0.2).timeout
 		Engine.time_scale = 1
 		minigame_over.emit(scores)
 		#get_tree().change_scene_to_file("res://Scenes/transition_scene.tscn")

@@ -1,6 +1,8 @@
 class_name SurfPlayer extends Node2D
 
-@export var GRAVITY := Vector2(0, 2)
+signal dead(id: int)
+
+@export var GRAVITY := Vector2(0, 4)
 @export var dive_accel := 30.0
 @export var max_horz_speed := 20.0
 @export var min_horz_speed := 7.0
@@ -17,7 +19,7 @@ var _is_diving := false
 var _device: int
 var _game : SurfMinigame
 var _grounded : bool = false
-var _radius : float = 64
+var _radius : float = 45
 var _debug_vel_line = Line2D.new()
 var _debug_orth_line = Line2D.new()
 var _debug_norm_line = Line2D.new()
@@ -42,6 +44,7 @@ func init(device: int, player_id: int, game: SurfMinigame):
 	_airborne_timer.autostart = false
 	_airborne_timer.one_shot = true
 	add_child(_debug_vel_line)
+	_debug_vel_line.self_modulate = Color.WHITE_SMOKE
 	#add_child(_debug_orth_line)
 	#add_child(_debug_norm_line)
 	add_child(_airborne_timer)
@@ -133,3 +136,10 @@ func _calculate_collision_angle(pos: Vector2, vel: Vector2) -> float:
 
 func dive() -> void:
 	velocity.y -= dive_accel
+
+
+func _on_area_2d_area_entered(area):
+	if area.is_in_group("DeathWall"):
+		dead.emit(id)
+		is_dead = true
+		create_tween().tween_property(self, "modulate:a", 0, 1)

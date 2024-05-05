@@ -6,16 +6,16 @@
 resource_local_to_scene = false
 resource_name = ""
 script = ExtResource("1_lyqwo")
-path = "dive"
+path = "xboxone/l_stick"
 show_mode = 0
-force_type = 0
+force_type = 2
 
 [sub_resource type="Texture2D" id="Texture2D_s60m6"]
 resource_local_to_scene = false
 resource_name = ""
 script = ExtResource("1_lyqwo")
 path = "move_up"
-show_mode = 0
+show_mode = 1
 force_type = 0
 
 [sub_resource type="Texture2D" id="Texture2D_301y0"]
@@ -23,7 +23,7 @@ resource_local_to_scene = false
 resource_name = ""
 script = ExtResource("1_lyqwo")
 path = "move_left"
-show_mode = 0
+show_mode = 1
 force_type = 0
 
 [sub_resource type="Texture2D" id="Texture2D_smrja"]
@@ -31,7 +31,7 @@ resource_local_to_scene = false
 resource_name = ""
 script = ExtResource("1_lyqwo")
 path = "move_down"
-show_mode = 0
+show_mode = 1
 force_type = 0
 
 [sub_resource type="Texture2D" id="Texture2D_7dk3c"]
@@ -39,7 +39,7 @@ resource_local_to_scene = false
 resource_name = ""
 script = ExtResource("1_lyqwo")
 path = "move_right"
-show_mode = 0
+show_mode = 1
 force_type = 0
 
 [node name="ControlsScreen" type="Control"]

@@ -51,3 +51,5 @@ autostart = true
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(801, 785)
 zoom = Vector2(1.4, 1.4)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
