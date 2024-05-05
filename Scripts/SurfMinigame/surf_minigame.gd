@@ -130,7 +130,7 @@ func _process(delta):
 		Engine.time_scale = 1
 		minigame_over.emit(_dead_players)
 	# Move death wall
-	$DeathWall.position.x += Tween.interpolate_value(5, 20, _time, difficulty_max_time,\
+	$DeathWall.position.x += Tween.interpolate_value(5, 18, _time, difficulty_max_time,\
 			Tween.TRANS_LINEAR, Tween.EASE_IN)
 
 
@@ -150,7 +150,7 @@ func _on_player_dead(id: int):
 
 class Terrain extends Node:
 	var curve : QuadBezier
-	var visual : Polygon2D
+	var visual : Line2D
 	
 	var position := Vector2.ZERO :
 		get:
@@ -206,27 +206,30 @@ class QuadBezier extends Node:
 		return (position.x - start.x) / (end.x - start.x)
 	
 	
-	func create_visual(depth: float = sample(0.5).y, color: Color = Color.WHITE) -> Polygon2D:
-		var poly = Polygon2D.new()
-		poly.antialiased = true
-		poly.color = color
-		poly.polygon.resize(CURVE_RES)
-		poly.polygon.fill(Vector2.ZERO)
+	func create_visual(depth: float = sample(0.5).y, color: Color = Color.WHITE) -> Line2D:
+		var line = Line2D.new()
+		line.antialiased = true
+		line.default_color = color
+		line.points.resize(CURVE_RES)
+		line.joint_mode = Line2D.LINE_JOINT_ROUND
+		line.end_cap_mode = Line2D.LINE_CAP_BOX
+		line.begin_cap_mode = Line2D.LINE_CAP_BOX
+		line.width = 50
 		var points = []
 		# Tessallate curve to reduce points needed to be drawn
 		for p in curve.tessellate():
 			points.append(p)
-		poly.position = Vector2(0, 0)
-		points.append(Vector2(end.x, sample(0.5).y + depth))
-		points.append(Vector2(start.x, sample(0.5).y + depth))
-		poly.polygon = points
+		line.position = Vector2(0, 0)
+		#points.append(Vector2(end.x, sample(0.5).y + depth))
+		#points.append(Vector2(start.x, sample(0.5).y + depth))
+		line.points = points
 		# Spawnpoint for next curve
 		var spawnpoint = Marker2D.new()
-		spawnpoint.position = Vector2(end.x - 2, end.y)
+		spawnpoint.position = Vector2(end.x, end.y)
 		spawnpoint.name = "Spawnpoint"
-		poly.add_child(spawnpoint, true)
+		line.add_child(spawnpoint, true)
 		
-		return poly
+		return line
 	
 	
 	# Source: https://docs.godotengine.org/en/stable/tutorials/math/beziers_and_curves.html

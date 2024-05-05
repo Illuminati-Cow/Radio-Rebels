@@ -5,6 +5,7 @@ var rumble_game = preload("res://Scenes/rumble.tscn")
 var pulse_game = preload("res://Scenes/pulse.tscn")
 var surf_game = preload("res://Scenes/surf.tscn")
 var transition_scene = preload("res://Scenes/transition_scene.tscn")
+var game_over_scene = preload("res://Resources/UI/GameOver.tscn")
 
 var games_dict = {
 	"rumble" : rumble_game,
@@ -15,6 +16,8 @@ var games_count := 2 as int
 var current_game := ""
 var next_game_num := 0 as int
 var next_game: String
+var game_length = 4
+var game_played = 0
 
 
 # Called when the node enters the scene tree for the first time.
@@ -45,10 +48,14 @@ func _pick_next_game():
 	
 	
 func _change_to_next_game():
+	if game_played >= game_length:
+		get_tree().change_scene_to_packed(game_over_scene)
+		return
 	print("changing game to ")
 	print(next_game)
 	assert(games_dict[next_game] != null)
 	current_game = next_game
+	game_played += 1
 	get_tree().change_scene_to_packed(games_dict[next_game])
 
 
