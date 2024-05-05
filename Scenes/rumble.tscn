@@ -41,7 +41,6 @@ grow_vertical = 2
 texture = SubResource("NoiseTexture2D_l8vse")
 
 [node name="TransmissionTower" parent="." instance=ExtResource("4_n51ah")]
-visible = false
 position = Vector2(214, 190)
 
 [node name="Timer" type="Timer" parent="."]

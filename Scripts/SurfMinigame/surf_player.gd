@@ -7,7 +7,6 @@ class_name SurfPlayer extends Node2D
 @export var max_vert_speed := 25.0
 @export var velocity_transfer_factor = 1.0
 @export var safe_angle : float
-@export var coll : CollisionShape2D
 @export var velocity : Vector2 = Vector2.ZERO
 @export var escape_velocity : Vector2 = Vector2(0, -5)
 

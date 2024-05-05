@@ -8,7 +8,6 @@ var transition_scene = preload("res://Scenes/transition_scene.tscn")
 
 var games_dict = {
 	"rumble" : rumble_game,
-	"pulse" : pulse_game,
 	"surf" : surf_game,
 }
 
@@ -39,12 +38,10 @@ func _modify_score(player : int, value: int):
 
 func _pick_next_game():
 	assert(rumble_game != null)
-	assert(pulse_game != null)
 	assert(surf_game != null)
 	
 	var dict_array = games_dict.keys()
-	var rand_game := randi() % games_count as int
-	next_game = dict_array[rand_game]
+	next_game = dict_array.pick_random()
 	
 	
 func _change_to_next_game():

@@ -28,6 +28,7 @@ var _winner_trackpoint := Node2D.new()
 func _ready():
 	await get_tree().create_timer(0.15).timeout
 	setup(PlayerManager.get_player_count())
+	minigame_over.connect(GameManager._on_minigame_over)
 
 
 func setup(player_count : int) -> void:
@@ -47,6 +48,7 @@ func setup(player_count : int) -> void:
 		_players.append(player)
 		camera.targets.append(player)
 	camera.make_current()
+	_controls_screen.reparent($CanvasLayer)
 	
 	add_child(_winner_trackpoint)
 	_winner_trackpoint.position.y = 0
@@ -113,10 +115,10 @@ func _process(delta):
 	# Update terrain
 	if terrain_pool.is_empty():
 		return
-	if terrain_pool[0].position.x < camera.position.x - 3000:
+	if terrain_pool.front().position.x < camera.position.x - 3000:
 		var terrain := terrain_pool.pop_front() as Terrain
 		terrain.queue_free()
-		_spawn_terrain_piece(terrain_pool[-1].visual.get_node("Spawnpoint").global_position, \
+		_spawn_terrain_piece(terrain_pool.back().visual.get_node("Spawnpoint").global_position, \
 			1000, 800 * _spawn_flip)
 		_spawn_flip = -_spawn_flip
 	# Update trackpoints
@@ -126,11 +128,14 @@ func _process(delta):
 		if player.global_position.x < rect.position.x - rect.size.x:
 			player.is_dead = true
 			_dead_players[player.id] = 1 + _dead_players.keys().size()
-	if _players.filter(func (p): return p.is_alive).size() == 1:
+	if _players.filter(func (p): return !p.is_dead).size() == 1:
 		Engine.time_scale = 0.2
 		await get_tree().create_timer(1).timeout
 		Engine.time_scale = 1
 		minigame_over.emit(_dead_players)
+	# Move death wall
+	$DeathWall.position.x += Tween.interpolate_value(3, 8, _time, difficulty_max_time,\
+			Tween.TRANS_LINEAR, Tween.EASE_IN)
 
 
 func _spawn_terrain_piece(start : Vector2, w : float, h : float) -> void:
@@ -145,6 +150,7 @@ func _spawn_terrain_piece(start : Vector2, w : float, h : float) -> void:
 class Terrain extends Node:
 	var curve : QuadBezier
 	var visual : Polygon2D
+	
 	var position := Vector2.ZERO :
 		get:
 			return curve.end

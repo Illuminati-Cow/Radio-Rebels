@@ -1,9 +1,22 @@
-[gd_scene load_steps=5 format=3 uid="uid://cqii6mimed067"]
+[gd_scene load_steps=9 format=3 uid="uid://cqii6mimed067"]
 
 [ext_resource type="Script" path="res://Scripts/SurfMinigame/surf_minigame.gd" id="1_6fsol"]
 [ext_resource type="PackedScene" uid="uid://ds1q6ranfqm7d" path="res://Resources/SurfMinigame/surf_player.res" id="2_rnj38"]
 [ext_resource type="PackedScene" uid="uid://dfqckn503ujex" path="res://Resources/SurfMinigame/surf_minigame_controls.tscn" id="3_hsljn"]
 [ext_resource type="PackedScene" uid="uid://bsq2r3ttc5exq" path="res://Resources/UI/PauseMenu.tscn" id="4_u7d5h"]
+[ext_resource type="Script" path="res://Scripts/SurfMinigame/group_tracking_camera.gd" id="5_ehime"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bjf1j"]
+size = Vector2(6000, 8000)
+
+[sub_resource type="Gradient" id="Gradient_aw5rr"]
+offsets = PackedFloat32Array(0, 0.954545, 1)
+colors = PackedColorArray(0, 0, 0, 1, 0.300906, 0.980668, 0, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_e8840"]
+gradient = SubResource("Gradient_aw5rr")
+width = 60
+height = 80
 
 [node name="Surf" type="Node2D"]
 script = ExtResource("1_6fsol")
@@ -12,33 +25,23 @@ difficulty_max_time = 60.0
 controls_screen = ExtResource("3_hsljn")
 pause_screen = ExtResource("4_u7d5h")
 
+[node name="DeathWall" type="Area2D" parent="."]
+position = Vector2(-4625, 32)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DeathWall"]
+shape = SubResource("RectangleShape2D_bjf1j")
+
+[node name="Sprite2D" type="Sprite2D" parent="DeathWall"]
+scale = Vector2(100, 100)
+texture = SubResource("GradientTexture2D_e8840")
+
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
-[node name="Control" type="Control" parent="CanvasLayer"]
-visible = false
-top_level = true
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="Button" type="Button" parent="CanvasLayer/Control"]
-layout_mode = 1
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_top = -31.0
-offset_right = 120.0
-grow_vertical = 0
-text = "Spawn Terrain"
-
-[node name="Camera2D" type="Camera2D" parent="."]
+[node name="Camera" type="Camera2D" parent="."]
+unique_name_in_owner = true
 position_smoothing_enabled = true
 editor_draw_drag_margin = true
+script = ExtResource("5_ehime")
 
 [node name="Spawnpoint" type="Marker2D" parent="."]
 position = Vector2(-930, -202)
-
-[connection signal="pressed" from="CanvasLayer/Control/Button" to="." method="_on_button_pressed"]

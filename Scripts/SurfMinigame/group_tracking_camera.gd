@@ -4,6 +4,7 @@ class_name GroupTrackingCamera extends Camera2D
 @export var tracking_power : float = 0.25
 @export var zooming_power : float = 0.4
 @export var max_zoom := 2
+@export var min_zoom := 0.1
 @export var buffer := 500
 
 var _trackpoint : Vector2 = Vector2.ZERO
@@ -38,6 +39,6 @@ func _calculate_encompassing_zoom() -> Vector2:
 	max_pos = Vector2(max_pos.x + buffer, max_pos.y + buffer)
 	var size := get_viewport_rect().size
 	var z = 0.5 / max(max_pos.x / size.x, max_pos.y / size.y)
-	z = min(z, max_zoom)
+	z = clamp(z, min_zoom, max_zoom)
 	
 	return Vector2(z, z)

@@ -1,14 +1,52 @@
-[gd_scene format=3 uid="uid://blqkcoim7s0kj"]
+[gd_scene load_steps=7 format=3 uid="uid://blqkcoim7s0kj"]
+
+[ext_resource type="Script" path="res://addons/controller_icons/objects/ControllerIconTexture.gd" id="1_lyqwo"]
+
+[sub_resource type="Texture2D" id="Texture2D_7cjtv"]
+resource_local_to_scene = false
+resource_name = ""
+script = ExtResource("1_lyqwo")
+path = "dive"
+show_mode = 0
+force_type = 0
+
+[sub_resource type="Texture2D" id="Texture2D_s60m6"]
+resource_local_to_scene = false
+resource_name = ""
+script = ExtResource("1_lyqwo")
+path = "move_up"
+show_mode = 0
+force_type = 0
+
+[sub_resource type="Texture2D" id="Texture2D_301y0"]
+resource_local_to_scene = false
+resource_name = ""
+script = ExtResource("1_lyqwo")
+path = "move_left"
+show_mode = 0
+force_type = 0
+
+[sub_resource type="Texture2D" id="Texture2D_smrja"]
+resource_local_to_scene = false
+resource_name = ""
+script = ExtResource("1_lyqwo")
+path = "move_down"
+show_mode = 0
+force_type = 0
+
+[sub_resource type="Texture2D" id="Texture2D_7dk3c"]
+resource_local_to_scene = false
+resource_name = ""
+script = ExtResource("1_lyqwo")
+path = "move_right"
+show_mode = 0
+force_type = 0
 
 [node name="ControlsScreen" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 500.0
-offset_top = 500.0
-offset_right = 500.0
-offset_bottom = 500.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -21,116 +59,54 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 0.105882)
 
-[node name="GridContainer" type="GridContainer" parent="."]
-custom_minimum_size = Vector2(200, 0)
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.5
-anchor_top = 0.25
-anchor_right = 0.5
-anchor_bottom = 0.64
-grow_horizontal = 2
-grow_vertical = 2
-columns = 2
-
-[node name="Label" type="Label" parent="GridContainer"]
+[node name="Label" type="Label" parent="."]
 custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
+offset_left = 1109.0
+offset_top = 560.0
+offset_right = 1326.0
+offset_bottom = 660.0
 size_flags_vertical = 1
-text = "Mega-Punch"
-horizontal_alignment = 1
-vertical_alignment = 1
-autowrap_mode = 3
-
-[node name="Label2" type="Label" parent="GridContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_type_variation = &"ControlLabel"
-text = "A"
+text = "Transmit"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Label3" type="Label" parent="GridContainer"]
-custom_minimum_size = Vector2(150, 0)
+[node name="TextureRect" type="TextureRect" parent="."]
 layout_mode = 2
-size_flags_vertical = 1
-text = "Mega-Punch"
-horizontal_alignment = 1
-vertical_alignment = 1
-autowrap_mode = 3
+offset_left = 1347.0
+offset_top = 558.0
+offset_right = 1447.0
+offset_bottom = 658.0
+texture = SubResource("Texture2D_7cjtv")
 
-[node name="Label4" type="Label" parent="GridContainer"]
+[node name="TextureRect2" type="TextureRect" parent="."]
 layout_mode = 2
-size_flags_horizontal = 3
-theme_type_variation = &"ControlLabel"
-text = "A"
-horizontal_alignment = 1
-vertical_alignment = 1
+offset_left = 1126.0
+offset_top = 665.0
+offset_right = 1226.0
+offset_bottom = 765.0
+texture = SubResource("Texture2D_s60m6")
 
-[node name="Label5" type="Label" parent="GridContainer"]
-custom_minimum_size = Vector2(150, 0)
+[node name="TextureRect3" type="TextureRect" parent="."]
 layout_mode = 2
-size_flags_vertical = 1
-text = "Mega-Punch"
-horizontal_alignment = 1
-vertical_alignment = 1
-autowrap_mode = 3
+offset_left = 1232.0
+offset_top = 665.0
+offset_right = 1332.0
+offset_bottom = 765.0
+texture = SubResource("Texture2D_301y0")
 
-[node name="Label6" type="Label" parent="GridContainer"]
+[node name="TextureRect4" type="TextureRect" parent="."]
 layout_mode = 2
-size_flags_horizontal = 3
-theme_type_variation = &"ControlLabel"
-text = "A"
-horizontal_alignment = 1
-vertical_alignment = 1
+offset_left = 1340.0
+offset_top = 665.0
+offset_right = 1440.0
+offset_bottom = 765.0
+texture = SubResource("Texture2D_smrja")
 
-[node name="Label7" type="Label" parent="GridContainer"]
-custom_minimum_size = Vector2(150, 0)
+[node name="TextureRect5" type="TextureRect" parent="."]
 layout_mode = 2
-size_flags_vertical = 1
-text = "Mega-Punch"
-horizontal_alignment = 1
-vertical_alignment = 1
-autowrap_mode = 3
-
-[node name="Label8" type="Label" parent="GridContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_type_variation = &"ControlLabel"
-text = "A"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Label9" type="Label" parent="GridContainer"]
-custom_minimum_size = Vector2(150, 0)
-layout_mode = 2
-size_flags_vertical = 1
-text = "Mega-Punch"
-horizontal_alignment = 1
-vertical_alignment = 1
-autowrap_mode = 3
-
-[node name="Label10" type="Label" parent="GridContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_type_variation = &"ControlLabel"
-text = "A"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Label11" type="Label" parent="GridContainer"]
-custom_minimum_size = Vector2(150, 0)
-layout_mode = 2
-size_flags_vertical = 1
-text = "Mega-Punch"
-horizontal_alignment = 1
-vertical_alignment = 1
-autowrap_mode = 3
-
-[node name="Label12" type="Label" parent="GridContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_type_variation = &"ControlLabel"
-text = "A"
-horizontal_alignment = 1
-vertical_alignment = 1
+offset_left = 1447.0
+offset_top = 665.0
+offset_right = 1547.0
+offset_bottom = 765.0
+texture = SubResource("Texture2D_7dk3c")
