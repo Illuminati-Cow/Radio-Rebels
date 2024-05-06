@@ -4,12 +4,14 @@ extends Node2D
 var rumble_game = preload("res://Scenes/rumble.tscn")
 var pulse_game = preload("res://Scenes/pulse.tscn")
 var surf_game = preload("res://Scenes/surf.tscn")
+var signal_game = preload("res://Scenes/signal/Arena.tscn")
 var transition_scene = preload("res://Scenes/transition_scene.tscn")
 var game_over_scene = preload("res://Resources/UI/GameOver.tscn")
 
 var games_dict = {
 	"rumble" : rumble_game,
 	"surf" : surf_game,
+	"signal" : signal_game,
 }
 
 var games_count := 2 as int
@@ -42,6 +44,7 @@ func _modify_score(player : int, value: int):
 func _pick_next_game():
 	assert(rumble_game != null)
 	assert(surf_game != null)
+	assert(signal_game != null)
 	
 	var dict_array = games_dict.keys().filter(func (g): return g != current_game)
 	next_game = dict_array.pick_random()
