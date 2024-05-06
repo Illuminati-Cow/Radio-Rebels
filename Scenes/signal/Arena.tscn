@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://4w0o4f41wm77"]
+[gd_scene load_steps=6 format=3 uid="uid://4w0o4f41wm77"]
 
 [ext_resource type="PackedScene" uid="uid://1sa4lm8j1fyx" path="res://Scenes/signal/player2.tscn" id="1_k51i0"]
 [ext_resource type="PackedScene" uid="uid://v35htymdlt7v" path="res://Scenes/signal/player.tscn" id="2_fqjly"]
+[ext_resource type="Script" path="res://Scenes/signal/player3.gd" id="3_gifnj"]
 [ext_resource type="PackedScene" uid="uid://b2fqoxv7xl5at" path="res://Scenes/signal/inside.tscn" id="3_ki0nv"]
 [ext_resource type="PackedScene" uid="uid://d1tacxtwj1id" path="res://Scenes/signal/Rectangle.tscn" id="6_0wk0w"]
 
@@ -11,12 +12,17 @@
 position = Vector2(4983, 1763)
 scale = Vector2(4, 4)
 
+[node name="Player3" parent="." instance=ExtResource("1_k51i0")]
+position = Vector2(4337, 1729)
+scale = Vector2(0.49, 0.49)
+script = ExtResource("3_gifnj")
+
 [node name="Player2" parent="." instance=ExtResource("1_k51i0")]
 position = Vector2(5419, 1630)
 scale = Vector2(0.7, 0.7)
 
 [node name="Player" parent="." instance=ExtResource("2_fqjly")]
-position = Vector2(4576, 1811)
+position = Vector2(1507, 2290)
 scale = Vector2(0.7, 0.7)
 
 [node name="Rectangle" parent="." instance=ExtResource("6_0wk0w")]
@@ -52,4 +58,5 @@ text = "
 
 		Shoot with Enter"
 
+[connection signal="body_entered" from="Player3" to="Player3" method="_on_body_entered"]
 [connection signal="body_entered" from="Player2" to="Player2" method="_on_body_entered"]

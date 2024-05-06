@@ -1,7 +1,7 @@
 extends RigidBody2D
 
 # Exported variables for customization
-@export var speed: float = 200
+@export var speed: float = 400
 @export var rectangle_scene_path: String = "res://Scenes/signal/Rectangle.tscn"
 
 # Private variables
@@ -27,12 +27,11 @@ var texture_pleft = preload("res://Scenes/signal/pleft.png")
 var texture_up = preload("res://Scenes/signal/up.png")
 var texture_down = preload("res://Scenes/signal/down.png")
 var chosen_texture = null  # Variable to hold the chosen texture based on direction
-var player_sprite = preload("res://Scenes/signal/player2.tscn")  # Assuming this is your player sprite
+var player_sprite = preload("res://Scenes/signal/player.tscn")  # Assuming this is your player sprite
 var side2 = 0
 var up2 = 0
 
 func _process(delta: float) -> void:
-	
 	var motion = Vector2.ZERO
 	motion = handle_input(motion)  # Get the updated motion vector
 	move_player(motion, delta)
@@ -40,52 +39,53 @@ func _process(delta: float) -> void:
 		update_rectangle_position()
 
 func handle_input(motion: Vector2) -> Vector2:
+	chosen_texture = texture_left
 	
+	update_player_sprite(texture_pright)
 	if shoot == 1:
 		update_rectangle_position()
 
 	push2 = Player.push1
-	
-	
-	
-	if Input.is_action_pressed("player2_right"):
+		
+		
+	if Input.is_action_pressed("ui_right"):
 		motion.x += 50
 		push = 1
 		chosen_texture = texture_right
 		update_player_sprite(texture_pright) 
 	
 	
-	if Input.is_action_pressed("player2_left"):
+	if Input.is_action_pressed("ui_left"):
 		motion.x -= 50
 		push = 2
 		chosen_texture = texture_left
 		update_player_sprite(texture_pleft)
-	if Input.is_action_pressed("player2_down"):
+	if Input.is_action_pressed("ui_down"):
 		motion.y += 50
 		push = 3
 		chosen_texture = texture_down
 		
-	if Input.is_action_pressed("player2_up"):
+	if Input.is_action_pressed("ui_up"):
 		motion.y -= 50
 		push = 4
 		chosen_texture = texture_up
 		
 		
 		
-	if Input.is_action_pressed("player2_up") && Input.is_action_pressed("player2_left"):
+	if Input.is_action_pressed("ui_up") && Input.is_action_pressed("ui_left"):
 		chosen_texture = texture_upleft
-	if Input.is_action_pressed("player2_up") && Input.is_action_pressed("player2_right"):
+	if Input.is_action_pressed("ui_up") && Input.is_action_pressed("ui_right"):
 		chosen_texture = texture_upright
-	if Input.is_action_pressed("player2_down") && Input.is_action_pressed("player2_left"):
+	if Input.is_action_pressed("ui_down") && Input.is_action_pressed("ui_left"):
 		chosen_texture = texture_downleft
-	if Input.is_action_pressed("player2_down") && Input.is_action_pressed("player2_right"):
+	if Input.is_action_pressed("ui_down") && Input.is_action_pressed("ui_right"):
 		chosen_texture = texture_downright
 		
 
 	if motion != Vector2.ZERO:
 		last_direction = motion.normalized()
 
-	if Input.is_action_just_pressed("rect_spawn") and shoot == 0:
+	if Input.is_action_just_pressed("rect_spawn2") and shoot == 0:
 		spawn_rectangle()
 		shoot = 1  # Prevents multiple rectangles until reset
 		

@@ -22,8 +22,8 @@ ControllerIcons="*res://addons/controller_icons/ControllerIcons.gd"
 MultiplayerInput="*res://addons/multiplayer_input/multiplayer_input.gd"
 GameManager="*res://Scripts/game_manager.gd"
 PlayerManager="*res://Scripts/player_manager.gd"
-Player="*res://Scenes/signal/player.tscn"
-Player2="*res://Scenes/signal/player2.tscn"
+Player="*res://Scenes/signal/player.gd"
+Player2="*res://Scenes/signal/player2.gd"
 
 [display]
 

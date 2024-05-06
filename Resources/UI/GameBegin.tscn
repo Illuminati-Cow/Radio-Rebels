@@ -30,7 +30,8 @@ func _process(delta):
 
 func _pressed():
 	
-	#get_tree().change_scene_to_file(\"res://Scenes/signal/Arena.tscn\")
+	get_tree().change_scene_to_file(\"res://Scenes/signal/Arena.tscn\")
+	#get_tree().change_scene_to_file(\"res://Scenes/transition_scene.tscn\")
 	
 	if PlayerManager.get_player_count() < 2:
 		%Require.show()
