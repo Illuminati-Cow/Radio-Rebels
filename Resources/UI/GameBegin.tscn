@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=3 uid="uid://ceg60nat81t1r"]
 
-[ext_resource type="Texture2D" path="res://Assets/backgroundfinal.webp" id="1_pikv8"]
+[ext_resource type="Texture2D" uid="uid://cynwhtte06roc" path="res://Assets/backgroundfinal.webp" id="1_pikv8"]
 [ext_resource type="Theme" uid="uid://3hg1ewgjleni" path="res://Resources/UI/default_theme.tres" id="2_gqskf"]
 [ext_resource type="Script" path="res://addons/controller_icons/objects/ControllerIconTexture.gd" id="3_gjs4q"]
 
@@ -29,6 +29,9 @@ func _process(delta):
 				%P4.show()
 
 func _pressed():
+	
+	#get_tree().change_scene_to_file(\"res://Scenes/signal/Arena.tscn\")
+	
 	if PlayerManager.get_player_count() < 2:
 		%Require.show()
 		return

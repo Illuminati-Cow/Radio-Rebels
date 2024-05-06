@@ -1,0 +1,27 @@
+[gd_scene load_steps=4 format=3 uid="uid://v35htymdlt7v"]
+
+[ext_resource type="Script" path="res://Scenes/signal/player.gd" id="1_7yqle"]
+[ext_resource type="Texture2D" uid="uid://k5n3xy121xxv" path="res://Scenes/signal/pright.png" id="1_jjlh6"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_lm1s3"]
+radius = 63.0
+height = 182.0
+
+[node name="Player" type="RigidBody2D"]
+disable_mode = 2
+gravity_scale = 0.0
+script = ExtResource("1_7yqle")
+speed = 400.0
+
+[node name="Sprite" type="Sprite2D" parent="."]
+position = Vector2(-2, -16)
+scale = Vector2(0.251, 0.234)
+texture = ExtResource("1_jjlh6")
+
+[node name="Area2D" type="Area2D" parent="." groups=["player"]]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(-12, -14)
+shape = SubResource("CapsuleShape2D_lm1s3")
+
+[connection signal="area_entered" from="Area2D" to="." method="_on_area_2d_area_entered"]

@@ -9,6 +9,8 @@ func _ready():
 			%GameLabel.text = "Radio Rumble"
 		"surf":
 			%GameLabel.text = "Wave Surfers"
+		"signal":
+			%GameLabel.text = "Signal Senders"
 	await get_tree().create_timer(2).timeout
 	GameManager._change_to_next_game()
 

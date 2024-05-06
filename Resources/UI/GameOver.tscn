@@ -1,8 +1,8 @@
 [gd_scene load_steps=5 format=3 uid="uid://c4bq6wwx687n3"]
 
-[ext_resource type="Texture2D" path="res://Assets/ring.png" id="2_6fuq2"]
+[ext_resource type="Texture2D" uid="uid://q40qne26h84y" path="res://Assets/ring.png" id="2_6fuq2"]
 [ext_resource type="Theme" uid="uid://3hg1ewgjleni" path="res://Resources/UI/default_theme.tres" id="2_stgtx"]
-[ext_resource type="Texture2D" path="res://Assets/soundwave.png" id="3_ajggi"]
+[ext_resource type="Texture2D" uid="uid://d1dk71np0sx3a" path="res://Assets/soundwave.png" id="3_ajggi"]
 
 [sub_resource type="GDScript" id="GDScript_5k0tg"]
 script/source = "extends Button

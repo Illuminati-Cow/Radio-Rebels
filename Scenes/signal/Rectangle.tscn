@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=3 uid="uid://d1tacxtwj1id"]
+
+[ext_resource type="Texture2D" uid="uid://cg4dwia7theds" path="res://Scenes/signal/left.png" id="1_csp60"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_l5vk0"]
+size = Vector2(217, 202)
+
+[node name="Rectangle" type="RigidBody2D" groups=["block"]]
+position = Vector2(71, 36)
+gravity_scale = 0.0
+
+[node name="Sprite" type="Sprite2D" parent="."]
+position = Vector2(-70.5, -33.5)
+scale = Vector2(0.34647, 0.30988)
+texture = ExtResource("1_csp60")
+
+[node name="Area2D" type="Area2D" parent="." groups=["block"]]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(-70, -34)
+shape = SubResource("RectangleShape2D_l5vk0")

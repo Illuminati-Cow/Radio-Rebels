@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3 uid="uid://b2fqoxv7xl5at"]
+
+[ext_resource type="Texture2D" uid="uid://bggu5drks06go" path="res://Scenes/signal/Untitled drawing (1).png" id="1_m7tju"]
+
+[node name="CharacterBody2D" type="CharacterBody2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(10, 0)
+texture = ExtResource("1_m7tju")
+
+[node name="Area2D" type="Area2D" parent="." groups=["inside"]]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Area2D"]
+polygon = PackedVector2Array(-2, -311, 101, -304, 212, -271, 305, -212, 384, -126, 426, -59, 424, 98, 367, 181, 267, 257, 162, 300, 13, 319, -137, 309, -292, 243, -361, 183, -427, 91, -425, -57, -389, -143, -247, -254, -102, -300, -26, -309, -26, -347, -142, -338, -230, -314, -299, -288, -373, -221, -456, -140, -470, -81, -470, 19, -470, 114, -380, 243, -218, 338, -40, 378, 124, 378, 329, 316, 462, 164, 495, -17, 450, -188, 324, -273, 172, -349, -30, -354)

@@ -1,0 +1,55 @@
+[gd_scene load_steps=5 format=3 uid="uid://4w0o4f41wm77"]
+
+[ext_resource type="PackedScene" uid="uid://1sa4lm8j1fyx" path="res://Scenes/signal/player2.tscn" id="1_k51i0"]
+[ext_resource type="PackedScene" uid="uid://v35htymdlt7v" path="res://Scenes/signal/player.tscn" id="2_fqjly"]
+[ext_resource type="PackedScene" uid="uid://b2fqoxv7xl5at" path="res://Scenes/signal/inside.tscn" id="3_ki0nv"]
+[ext_resource type="PackedScene" uid="uid://d1tacxtwj1id" path="res://Scenes/signal/Rectangle.tscn" id="6_0wk0w"]
+
+[node name="Arena" type="Node2D"]
+
+[node name="CharacterBody2D" parent="." instance=ExtResource("3_ki0nv")]
+position = Vector2(4983, 1763)
+scale = Vector2(4, 4)
+
+[node name="Player2" parent="." instance=ExtResource("1_k51i0")]
+position = Vector2(5419, 1630)
+scale = Vector2(0.7, 0.7)
+
+[node name="Player" parent="." instance=ExtResource("2_fqjly")]
+position = Vector2(4576, 1811)
+scale = Vector2(0.7, 0.7)
+
+[node name="Rectangle" parent="." instance=ExtResource("6_0wk0w")]
+position = Vector2(1580, 1714)
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(5831, 2178)
+zoom = Vector2(0.4, 0.4)
+
+[node name="TextEdit" type="TextEdit" parent="."]
+offset_left = 3017.0
+offset_top = 475.0
+offset_right = 3571.0
+offset_bottom = 1050.0
+text = "	
+		Player One:
+
+	Move With WASD
+
+	Shoot with Space
+
+"
+
+[node name="TextEdit2" type="TextEdit" parent="."]
+offset_left = 6578.0
+offset_top = 577.0
+offset_right = 7273.0
+offset_bottom = 1056.0
+text = "				
+			Player Two:
+
+	Move with arrow keys
+
+		Shoot with Enter"
+
+[connection signal="body_entered" from="Player2" to="Player2" method="_on_body_entered"]
